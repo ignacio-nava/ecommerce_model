@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if 'email' in request.get_full_path %}
+  <h3>Check your email for instructions</h3>
+{% endif%}
+{% if 'complete' in request.get_full_path %}
+  <h3>Password Reset Success</h3>
+  <a href="{% url 'account:login-form' %}">Login</a>
+{% endif%}
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div id="items-in-basket">
+    {% for item in basket %}
+      <div>
+        <h3>{{ item.product.title|title }}</h3>
+        {% if item.product.image_external %}
+          <img src="{{item.product.image_external}}" class="product_image" width="100" height="100"/>
+        {% else %}
+          <img src="{% get_media_prefix %}{{item.product.image}}" class="product_image" width="100" height="100"/>
+        {% endif %}
+        <p>Quantity: {{ item.total_item_qty }} | Price: $<span id="item-price">{{ item.total_item_price }}</span> |
+          <select name="" id="qty-select">
+            <option selected>{{ item.total_item_qty }}</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          <button id="update-to-basket-button" value="{{ item.product.id }}">Update Basket</button>
+          |
+          <button
+            id="delete-to-basket-button"
+            value="{{ item.product.id }}"
+            style="background:red; color:white; border: none; border-radius: 100%; width: 32px; height: 32px; cursor: pointer;"
+          >x</button>
+        </p>
+      </div>
+      <br>
+      <hr>
+    {% endfor %}
+    <h1 id="total-price">SUBTOTAL --> ${{ basket.get_total_price }}</h1>
+  </div>
+
+  <script>
+    const updateBasketCount = qty => {
+      const inCartItems = $('.in-cart-shopping')
+      document.querySelector('#cart-count-items').innerHTML = qty
+      qty > 0 ? inCartItems.show() : inCartItems.hide()
+    }
+
+    const setUpdateHandler = button => {
+      const qtySelector = button.parentElement.querySelector('#qty-select')
+      $.ajax({
+        type: 'POST',
+        url: '{% url "basket:basket_update" %}',
+        data: {
+          productId: button.value,
+          productQty: qtySelector.options[qtySelector.selectedIndex].value,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'post'
+        },
+        success: json => {
+          const itemPriceHolder = button.parentElement.querySelector('#item-price')
+          itemPriceHolder.innerHTML = json.totalItemPrice
+          const totalPriceHolder = document.querySelector('#total-price')
+          totalPriceHolder.innerHTML = `SUBTOTAL --> $${json.totalPrice}`
+          updateBasketCount(json.qty)
+          showMessage('Updated Product')
+        },
+        error: (xhr, errormsg, err) => {
+          console.log(errormsg)
+        }
+      })
+    }
+
+    setDeleteHandler = button => {
+      $.ajax({
+        type: 'POST',
+        url: '{% url "basket:basket_delete" %}',
+        data: {
+          productId: button.value,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'post'
+        },
+        success: json => {
+          $('#items-in-basket').empty()
+          let htmlData = []
+          json.items.forEach(item => {
+            const imgSrc = item.product.image_external || `/media/${item.product.image}`
+            htmlData.push(`<div>
+                            <h3 style="text-transform: capitalize;">${item.product.title}</h3>
+                            <img src="${imgSrc}" width="100" height="100"/>
+                            <p>Quantity: ${item.totalItemQty} | Price: $<span id="item-price">${item.totalItemPrice}</span> |
+                              <select name="" id="qty-select">
+                                <option selected>${item.totalItemQty}</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                              </select>
+                              <button id="update-to-basket-button" value="${item.product.id}">Update Basket</button>
+                              |
+                              <button
+                                id="delete-to-basket-button"
+                                value="${item.product.id}"
+                                style="background:red; color:white; border: none; border-radius: 100%; width: 32px; height: 32px; cursor: pointer;"
+                              >x</button>
+                            </p>
+                          </div>
+                          <br>
+                          <hr>
+            `)
+          })
+          htmlData.push(`<h1 id="total-price">SUBTOTAL --> $${json.totalPrice}</h1>`)
+          $('<div/>', {
+            html: htmlData.join("")
+          }).appendTo('#items-in-basket')
+          updateBasketCount(json.qty)
+          setOwnListeners()
+          showMessage('Deleted Product')
+        },
+        error: (xhr, errormsg, err) => {
+          console.log(errormsg)
+        }
+      })
+    }
+
+    setOwnListeners = () => {
+      const updateButtons = document.querySelectorAll('#update-to-basket-button')
+      updateButtons.forEach(button => {
+        button.addEventListener('click', () => setUpdateHandler(button))
+      })
+
+      const deleteButtons = document.querySelectorAll('#delete-to-basket-button')
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', () => setDeleteHandler(button))
+      })
+    }
+
+    setOwnListeners()
+  </script>
+{% endblock %}

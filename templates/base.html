@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- font-awsome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&family=Satisfy&display=swap" rel="stylesheet">
+
+  <!-- -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{% static 'js/navControllers.js' %}" defer></script>
+  <script src="{% static 'js/flashControllers.js' %}" defer></script>
+  <script src="{% static 'js/imageControllers.js' %}" defer></script>
+  <!-- {% if search %} -->
+    <script src="{% static 'js/searchControllers.js' %}" defer></script>
+  <!-- {% endif %} -->
+  {% block head %}
+  {% endblock %}
+</head>
+<body>
+  <header class="header">
+    <div class="primary-navigation header-container">
+      <a href="{% url 'store:product_all' %}" class="logo">eCom</a>
+      {% if search %}
+        <div class="navigation-form">
+          <form class="search-form" method="GET" action="/" id="navbar-search-form">
+            <input
+              type="text"
+              name="search"
+              id="search"
+              class="search-input"
+              autocomplete="off"
+              aria-controls="suggestion-list"
+            >
+            <button type="submit" class="search-button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <div id="suggestions" class="suggestions" aria-hidden="true">
+              <ul id="suggestions-list" class="flex-column pad-y-100" role="list"></ul>
+            </div>
+          </form>
+        </div>
+      {% endif %}
+      <div class="navigation-wrapper">
+        <div class="secondary-navigation-toggle">
+          <button class="navigation-toggle-button">
+            <div class="hamburger"></div>
+          </button>
+        </div>
+        <div class="account-access fs-200">
+          {% if not user.is_authenticated %}
+            <a href="{% url 'account:registration-form'%}" class="fc-white">
+              Register
+            </a>
+            <span>/</span>
+            <a href="{% url 'account:login-form'%}" class="fc-white">
+              Login
+            </a>
+          {% else %}
+            <a href="{% url 'account:dashboard' %}" class="fc-white">
+              {{ user.email }}
+            </a>
+            <div>
+              <button id="user-options-toggle" class="user-options-toggle fs-300">
+                <i class="fa-solid fa-caret-down fc-white"e></i>
+              </button>
+              <div id="user-options" class="user-options">
+                <ul class="pad-y-050" role="list">
+                  <li class="pad-y-050">
+                    <a href="{% url 'account:update-form' %}" class="fc-dark pad-y-030 pad-x-100">
+                      <i class="fa-solid fa-pen"></i>
+                      <span>Edit</span>
+                    </a>
+                  </li>
+                  <li class="pad-y-050">
+                    <a href="{% url 'account:logout' %}" class="fc-dark pad-y-030 pad-x-100">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                      <span>Logout</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="basket-access">
+          <a href="{% url 'basket:basket_summary' %}">
+            <i class="fa-solid fa-cart-shopping fc-white"></i>
+          </a>
+          {% if basket.get_count_items < 1 %}
+            <div class="in-cart-shopping" style="display: none;">
+          {% else %}
+            <div class="in-cart-shopping">
+          {% endif %}
+            <span id="cart-count-items">{{ basket.get_count_items }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+  {% block content %}
+  {% endblock %}
+
+  {% if messages %}
+    {% for message in messages %}
+      <div
+        id="flash-message"
+        class="message message-show"
+        tags="{{ message.tags }}">
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  {% endif %}
+  </main>
+
+  <script>
+    $( document ).ready(() => setMessageHandler())
+  </script>
+</body>
+</html>
