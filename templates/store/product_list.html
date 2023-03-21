@@ -5,22 +5,6 @@
 {% block content %}
   <h1>Product List</h1>
 
-  {% if page_obj %}
-  <ul style="display: flex; gap: .5rem; list-style: none;">
-
-    {% if page_obj.has_previous %}
-      <li><a href="/?page={{ page_obj.previous_page_number }}">Previous</a></li>
-    {% endif %}
-
-    <li>{{ page_obj.number }}</li>
-
-    {% if page_obj.has_next %}
-      <li><a href="/?page={{ page_obj.next_page_number }}">Next</a></li>
-    {% endif %}
-
-  </ul>
-  {% endif %}
-
   <ul>
     {% for product in products %}
       {% if product.image_external %}
@@ -38,6 +22,28 @@
   {% if is_paginated %}
 
   {% endif %}
+  {% if page_obj %}
+  <ul style="display: flex; gap: .5rem; list-style: none;">
 
+    {% if page_obj.has_previous %}
+      <li><a href="/?page={{ page_obj.previous_page_number }}">&lt;&lt;</a></li>
+    {% endif %}
+    <li>
+    {% for page in pages %}
+      <a
+        href="/?page={{page}}"
+        {% if page == page_obj.number %}
+          style="font-weight:bold;"
+        {%endif%}>
+        {{ page }}
+      </a>
+    {% endfor %}
+    </li>
+    {% if page_obj.has_next %}
+      <li><a href="/?page={{ page_obj.next_page_number }}">&gt;&gt;</a></li>
+    {% endif %}
+
+  </ul>
+  {% endif %}
   <a href="{% url 'store:product_create' %}">Add Product</a>
 {% endblock %}

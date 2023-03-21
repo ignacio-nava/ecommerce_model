@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from utils.paginator import get_pages_to_display
 
 
 from .models import Category, Product
@@ -15,7 +16,9 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(dir(context['page_obj']))
+        current_page = context['page_obj'].number
+        num_pages = context['page_obj'].paginator.num_pages
+        context['pages'] = get_pages_to_display(num_pages, 5, current_page)
         return context
 
 class ProductDetailView(DetailView):
