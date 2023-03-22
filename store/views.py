@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.shortcuts import render
 from utils.paginator import get_pages_to_display
 
 
@@ -12,6 +13,7 @@ class ProductListView(ListView):
     paginate_by = 10
     model = Product
     context_object_name = 'products'
+    template_name = 'store/product_list.html'
     success_message = "success message"
 
     def get_context_data(self, **kwargs):
@@ -19,7 +21,9 @@ class ProductListView(ListView):
         current_page = context['page_obj'].number
         num_pages = context['page_obj'].paginator.num_pages
         context['pages'] = get_pages_to_display(num_pages, 5, current_page)
+        context['featured_products'] = Product.objects.order_by('?')[0:12]
         return context
+
 
 class ProductDetailView(DetailView):
     model = Product
