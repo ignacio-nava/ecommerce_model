@@ -6,25 +6,24 @@
 
   <section class="carousel">
     <div class="carousel-container">
-      <div class="carousel-item" data-index="0" data-status="active" style="background-color: rgb(183, 85, 85);"></div>
-      <div class="carousel-item" data-index="1" style="background-color: rgb(43, 43, 165);"></div>
-      <div class="carousel-item" data-index="2" style="background-color: rgb(66, 170, 66);"></div>
-      <div class="carousel-item" data-index="3" style="background-color: rgb(209, 209, 73);"></div>
+      <div style="background-color: rgb(183, 85, 85);"></div>
+      <div style="background-color: rgb(43, 43, 165);"></div>
+      <div style="background-color: rgb(66, 170, 66);"></div>
+      <div style="background-color: rgb(209, 209, 73);"></div>
     </div>
-    <div class="carousel-navigation">
-      <div class="carousel-navigation-item carousel-left" style="--side-shadow: -1;" aria-label="carousel-prev">
-        <div>
-          <span class="carousel-navigation-arrow" style="--right-position: 12px">&lt;</span>
+  </section>
+
+  <section class="product-list">
+    {% for product in offers_products %}
+      <div class="product-cart">
+        <div class="product-cart--top">
+          <img src="{{ product.image_external }}" alt="">
+        </div>
+        <div class="product-cart--bottom">
+          <p>${{ product.price }} ${{ product.offer_price }} %{{ product.discount }}</p>
         </div>
       </div>
-      <div class="carousel-navigation-item carousel-right" aria-label="carousel-next">
-        <div>
-          <span class="carousel-navigation-arrow" style="--left-position: 12px">&gt;</span>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-bullets">
-    </div>
+    {% endfor %}
   </section>
 
   <!-- <ul>
@@ -70,4 +69,11 @@
   <a href="{% url 'store:product_create' %}">Add Product</a> -->
 
   <script src="{% static 'js/carouselControllers.js' %}"></script>
+  <script>
+    const carousel = new Carousel('.carousel')
+    carousel.build()
+  </script>
+
 {% endblock %}
+
+
