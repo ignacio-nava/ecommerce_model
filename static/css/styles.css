@@ -623,3 +623,38 @@ select {
 .carousel-bullets > div[data-active='true'] {
     background-color: rgba(255, 255, 255, 0.616);
 }
+
+/* Products Cards */
+
+.product-list {
+    background-color: #f4f1f1;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+}
+
+.product-cart {
+    width: 16rem;
+    height: 20rem;
+    background-color: var(--color-white);
+}
+
+.product-cart--top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    border-bottom: 1px solid #f4f1f1
+}
+
+.product-cart--top > img {
+    width: 90%;
+    height: 90%;
+    object-fit: scale-down;
+}
+
+.product-cart--bottom {
+    /* background-color: green; */
+    height: 40%;
+}
