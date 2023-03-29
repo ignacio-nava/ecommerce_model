@@ -22,10 +22,10 @@ export class Carousel {
                 this._buildIndex()
                 this._setActiveItem(this.config.initalIndexActive, true)
                 if (this.config.navigators) {
-                    this._buildNavigators(this[this.config.navigators])
+                    this._buildElement(this[this.config.navigators])
                 }
                 if (this.config.bullets) {
-                    this._buildNavigators(this[this.config.bullets])
+                    this._buildElement(this[this.config.bullets])
                 }
                 break
             default:
@@ -54,7 +54,7 @@ export class Carousel {
         this.carouselItems = this.carousel.querySelectorAll('.carousel-item')
     }
 
-    _buildNavigators(obj, parent=this.carousel) {
+    _buildElement(obj, parent=this.carousel) {
 
         const element = document.createElement(obj.element)
         obj.classes && obj.classes.forEach(c => (
@@ -78,7 +78,7 @@ export class Carousel {
 
         if (obj.innerHTML) element.innerHTML = obj.innerHTML
         obj.childrens && obj.childrens.forEach(children => (
-            this._buildNavigators(children, element)
+            this._buildElement(children, element)
         ))
 
         obj.callback && obj.callback(this, element)
