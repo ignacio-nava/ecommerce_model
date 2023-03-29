@@ -67,12 +67,7 @@
   {% endif %}
 
   <a href="{% url 'store:product_create' %}">Add Product</a> -->
-
-  <script src="{% static 'js/carouselControllers.js' %}"></script>
-  <script>
-    const carousel = new Carousel('.carousel')
-    carousel.build()
-  </script>
+  <script src="{% static 'js/carouselControllers.js' %}" type="module"></script>
 
 {% endblock %}
 
