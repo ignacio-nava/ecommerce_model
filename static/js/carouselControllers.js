@@ -1,4 +1,10 @@
 import { Carousel } from "./carouselManager/carouselMain.js";
 
-const carousel = new Carousel('.carousel')
-carousel.build()
+const carouselBanners = new Carousel('#carousel-banners')
+carouselBanners.build()
+
+
+const carouselOffers = new Carousel('#carousel-offers')
+carouselOffers.build({
+    type: 'slide'
+})

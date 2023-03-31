@@ -1,33 +1,59 @@
-import { classicNavigatorArrow } from "./navigationsOptions.js"
-import { classicBulletCircle } from './bulletsOptions.js'
+import { navigationOptions } from "./navigationsOptions.js"
+import { bulletsOptions } from './bulletsOptions.js'
 
 export class Carousel {
-    classicNavigatorArrow = classicNavigatorArrow
-    classicBulletCircle = classicBulletCircle
 
-    constructor(selector, config={}) {
+    constructor(selector) {
         this.carousel = document.querySelector(selector)
-        this.carouselItemsDiv = this.carousel.querySelector('.carousel-container')
-        this.config = {
-            type: this._checkData(config.type, 'classic'),
-            initalIndexActive: config.initalIndexActive || 0,
-            navigators: this._checkData(config.navigators, 'classicNavigatorArrow'),
-            bullets: this._checkData(config.bullets, 'classicBulletCircle')
-        }
+        this.carousel.classList.add('carousel')
+        this.carouselItemsDiv = this.carousel.children[0]
+        this.carouselItems = this.carouselItemsDiv.children
     }
 
-    build() {
+    build(config={}) {
+        this.config = {
+            type: config.type || 'classic'
+        }
+        this.config = {
+            ...this.config,
+            initalIndexActive: config.initalIndexActive || 0,
+            navigators: this._checkData(config.navigators, this.config.type),
+            bullets: this._checkData(config.bullets, this.config.type)
+        }
+
         switch (this.config.type) {
             case 'classic':
+                this.carouselItemsDiv.classList.add('carousel-classic')
                 this._buildIndex()
                 this._setActiveItem(this.config.initalIndexActive, true)
                 if (this.config.navigators) {
-                    this._buildElement(this[this.config.navigators])
+                    this._buildElement(navigationOptions[this.config.navigators])
                 }
                 if (this.config.bullets) {
-                    this._buildElement(this[this.config.bullets])
+                    this._buildElement(bulletsOptions[this.config.bullets])
                 }
                 break
+            case 'slide':
+                this.carouselItemsDiv.classList.add('carousel-slide')
+                const itemsCopy = [...this.carouselItems]
+                for (let i = 0; i < itemsCopy.length; i++) {
+                    const item = itemsCopy[i]
+                    this.carouselItemsDiv.removeChild(item)
+                }
+
+                this.slider = document.createElement('div')
+                this.slider.classList.add('flex-row')
+                for (let i = 0; i < itemsCopy.length; i++) {
+                    const item = itemsCopy[i]
+                    item.classList.add('test-box')
+                    this.slider.appendChild(item)
+                }
+                this.carouselItemsDiv.appendChild(this.slider)
+
+                if (this.config.navigators) {
+                    this._buildElement(navigationOptions[this.config.navigators])
+                }
+
             default:
                 break
         }
@@ -46,12 +72,12 @@ export class Carousel {
     }
 
     _buildIndex() {
-        for (let i = 0; i < this.carouselItemsDiv.children.length; i++) {
-            const item = this.carouselItemsDiv.children[i]
+        for (let i = 0; i < this.carouselItems.length; i++) {
+            const item = this.carouselItems[i]
             item.classList.add('carousel-item')
             item.setAttribute('data-index', i)
         }
-        this.carouselItems = this.carousel.querySelectorAll('.carousel-item')
+
     }
 
     _buildElement(obj, parent=this.carousel) {
@@ -77,6 +103,7 @@ export class Carousel {
         }
 
         if (obj.innerHTML) element.innerHTML = obj.innerHTML
+
         obj.childrens && obj.childrens.forEach(children => (
             this._buildElement(children, element)
         ))
@@ -118,8 +145,8 @@ export class Carousel {
         !initial && this.carouselItems[oldIndex].setAttribute('data-animation', `to-${side_to_animate}`)
     }
 
-    _navigatorClickListener(e) {
-        const element = e.target.localName === 'span' ? e.target.parentElement.parentElement : e.target.parentElement
+    _navigatorClickListenerClassic(e) {
+        const element = this._getNavigationRuler(e)
 
         const itemActiveIndex = [...this.carouselItems].filter(item => (
             item.getAttribute('data-status') == 'active'
@@ -137,8 +164,29 @@ export class Carousel {
         }
     }
 
+    _navigatorClickListenerSlide(e) {
+        const element = this._getNavigationRuler(e)
+        const maxScroll = this.slider.scrollLeftMax
+
+        switch (element.getAttribute('aria-label')) {
+            case 'carousel-prev':
+                this.slider.scrollLeft = 0
+                break
+            case 'carousel-next':
+                this.slider.scrollLeft = maxScroll / this.carouselItems.length * 4
+                break
+            default:
+                break
+        }
+
+    }
+
     _setAnimationsName(oldIndex, newIndex) {
         if (Math.abs(oldIndex - newIndex) > 1) return oldIndex > newIndex ? 'left' : 'right'
         return oldIndex < newIndex ? 'left' : 'right'
+    }
+
+    _getNavigationRuler(e) {
+        return e.target.localName === 'span' ? e.target.parentElement.parentElement : e.target.parentElement
     }
 }

@@ -4,26 +4,33 @@
 
 {% block content %}
 
-  <section class="carousel">
-    <div class="carousel-container">
-      <div style="background-color: rgb(183, 85, 85);"></div>
-      <div style="background-color: rgb(43, 43, 165);"></div>
-      <div style="background-color: rgb(66, 170, 66);"></div>
-      <div style="background-color: rgb(209, 209, 73);"></div>
+  <section id="banners">
+    <div id="carousel-banners">
+      <div>
+        <div style="background-color: rgb(183, 85, 85);"></div>
+        <div style="background-color: rgb(43, 43, 165);"></div>
+        <div style="background-color: rgb(66, 170, 66);"></div>
+        <div style="background-color: rgb(209, 209, 73);"></div>
+      </div>
     </div>
   </section>
 
-  <section class="product-list">
-    {% for product in offers_products %}
-      <div class="product-cart">
-        <div class="product-cart--top">
-          <img src="{{ product.image_external }}" alt="">
-        </div>
-        <div class="product-cart--bottom">
-          <p>${{ product.price }} ${{ product.offer_price }} %{{ product.discount }}</p>
+  <section class="product-offers">
+    <div class="container" style="height: 16rem;">
+      <div id="carousel-offers">
+        <div>
+          <div style="background-color: rgb(183, 85, 85);"></div>
+          <div style="background-color: rgb(43, 43, 165);"></div>
+          <div style="background-color: rgb(66, 170, 66);"></div>
+          <div style="background-color: rgb(209, 209, 73);"></div>
+          <div style="background-color: rgb(183, 85, 85);"></div>
+          <div style="background-color: rgb(43, 43, 165);"></div>
+          <div style="background-color: rgb(66, 170, 66);"></div>
+          <div style="background-color: rgb(209, 209, 73);"></div>
         </div>
       </div>
-    {% endfor %}
+    </div>
+
   </section>
 
   <!-- <ul>

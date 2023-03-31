@@ -32,6 +32,7 @@ body {
   text-rendering: optimizeSpeed;
   line-height: 1.5;
   font-family: 'Noto Sans JP', sans-serif;
+  overflow-x: hidden;
 }
 
 /* A elements that don't have a class get default styles */
@@ -495,13 +496,15 @@ select {
 
 .carousel {
     position: relative;
+    height: 100%;
 }
 
-.carousel-container {
+.carousel-classic {
     position: relative;
     width: 100%;
     height: 22rem;
 }
+
 .carousel-item {
     position: absolute;
     display: none;
@@ -560,21 +563,30 @@ select {
     position: absolute;
     width: var(--carousel-nav-item-size);
     height: var(--carousel-nav-item-size);
-    background-color: transparent;
+
     cursor: pointer;
     border-radius: 100%;
     top: 50%;
     transform: translateY(-50%);
     transition: 200ms all;
 
-    color: transparent;
-}
-
-.carousel-navigation-item:hover {
     background-color: rgb(222, 221, 221);
-    box-shadow: calc(var(--side-shadow, 1) * -3px) 0px 7px #00000021;
     color: inherit;
 }
+
+@media (min-width: 70em) {
+    .carousel-navigation-item-classic{
+        background-color: transparent;
+        color: transparent;
+    }
+
+    .carousel-navigation-item-classic:hover {
+        background-color: rgb(222, 221, 221);
+        box-shadow: calc(var(--side-shadow, 1) * -3px) 0px 7px #00000021;
+        color: inherit;
+    }
+}
+
 
 .carousel-navigation-item > div {
     position: relative;
@@ -626,10 +638,44 @@ select {
 
 /* Products Cards */
 
-.product-list {
+.test-box {
+    width: 25%;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+
+.carousel-slide {
+    position: absolute;
+    border: 1px solid green;
+    width: 100%;
+    height: 100%;
+}
+
+.product-offers {
+    background-color: #f4f1f1;
+    padding: 2rem 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+
+
+/* .product-list {
     background-color: #f4f1f1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 3rem;
     align-items: center;
 }
@@ -655,6 +701,5 @@ select {
 }
 
 .product-cart--bottom {
-    /* background-color: green; */
     height: 40%;
-}
+} */
