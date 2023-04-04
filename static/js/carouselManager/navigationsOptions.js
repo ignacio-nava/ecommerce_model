@@ -9,7 +9,7 @@ export const navigationOptions = {
                 element: 'div',
                 classes: [
                     'carousel-navigation-item',
-                    'carousel-navigation-item-classic',
+                    'carousel-navigation-item',
                     'carousel-left'
                 ],
                 styles: [
@@ -28,6 +28,14 @@ export const navigationOptions = {
                     {
                         event: 'click',
                         callback: '_navigatorClickListenerClassic'
+                    },
+                    {
+                        event: 'mouseenter',
+                        callback: '_setNavigationHoverAnimation'
+                    },
+                    {
+                        event: 'mouseleave',
+                        callback: '_setNavigationHoverAnimation'
                     }
                 ],
                 childrens: [
@@ -55,7 +63,7 @@ export const navigationOptions = {
                 element: 'div',
                 classes: [
                     'carousel-navigation-item',
-                    'carousel-navigation-item-classic',
+                    'carousel-navigation-item',
                     'carousel-right'
                 ],
                 attibutes: [
@@ -68,6 +76,14 @@ export const navigationOptions = {
                     {
                         event: 'click',
                         callback: '_navigatorClickListenerClassic'
+                    },
+                    {
+                        event: 'mouseenter',
+                        callback: '_setNavigationHoverAnimation'
+                    },
+                    {
+                        event: 'mouseleave',
+                        callback: '_setNavigationHoverAnimation'
                     }
                 ],
                 childrens: [
@@ -105,6 +121,12 @@ export const navigationOptions = {
                     'carousel-navigation-item',
                     'carousel-left'
                 ],
+                styles: [
+                    {
+                        name: 'display',
+                        value: 'none'
+                    }
+                ],
                 attibutes: [
                     {
                         name: 'aria-label',
@@ -115,6 +137,14 @@ export const navigationOptions = {
                     {
                         event: 'click',
                         callback: '_navigatorClickListenerSlide'
+                    },
+                    {
+                        event: 'mouseenter',
+                        callback: '_setNavigationHoverAnimation'
+                    },
+                    {
+                        event: 'mouseleave',
+                        callback: '_setNavigationHoverAnimation'
                     }
                 ],
                 childrens: [
@@ -158,6 +188,14 @@ export const navigationOptions = {
                     {
                         event: 'click',
                         callback: '_navigatorClickListenerSlide'
+                    },
+                    {
+                        event: 'mouseenter',
+                        callback: '_setNavigationHoverAnimation'
+                    },
+                    {
+                        event: 'mouseleave',
+                        callback: '_setNavigationHoverAnimation'
                     }
                 ],
                 childrens: [

@@ -575,12 +575,12 @@ select {
 }
 
 @media (min-width: 70em) {
-    .carousel-navigation-item-classic{
+    .carousel-navigation-item{
         background-color: transparent;
         color: transparent;
     }
 
-    .carousel-navigation-item-classic:hover {
+    .carousel-navigation-item[data-visible='true'] {
         background-color: rgb(222, 221, 221);
         box-shadow: calc(var(--side-shadow, 1) * -3px) 0px 7px #00000021;
         color: inherit;
@@ -644,6 +644,11 @@ select {
     flex-shrink: 0;
 }
 
+.test-box > div {
+    background-color: white;
+    margin: 0 1rem;
+}
+
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -654,7 +659,6 @@ select {
 
 .carousel-slide {
     position: absolute;
-    border: 1px solid green;
     width: 100%;
     height: 100%;
 }
