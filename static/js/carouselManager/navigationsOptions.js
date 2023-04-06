@@ -86,6 +86,12 @@ export const navigationOptions = {
                         callback: '_setNavigationHoverAnimation'
                     }
                 ],
+                callback: (object, element) => ((
+                    setInterval(() => {
+                        const isHover = element.getAttribute('data-visible')
+                        if (!isHover) element.children[0].click()
+                    }, object.timerAuto)
+                )),
                 childrens: [
                     {
                         element: 'div',
@@ -119,18 +125,25 @@ export const navigationOptions = {
                 element: 'div',
                 classes: [
                     'carousel-navigation-item',
-                    'carousel-left'
-                ],
-                styles: [
-                    {
-                        name: 'display',
-                        value: 'none'
-                    }
+                    'carousel-left',
+                    'card-top-fixed',
+                    'card-left-fixed',
+                    'half-left'
                 ],
                 attibutes: [
                     {
                         name: 'aria-label',
                         value: 'carousel-prev'
+                    }
+                ],
+                styles: [
+                    {
+                        name: '--side-shadow',
+                        value: '-1'
+                    },
+                    {
+                        name: 'display',
+                        value: 'none'
                     }
                 ],
                 eventListeners: [
@@ -176,7 +189,10 @@ export const navigationOptions = {
                 element: 'div',
                 classes: [
                     'carousel-navigation-item',
-                    'carousel-right'
+                    'carousel-right',
+                    'card-top-fixed',
+                    'card-right-fixed',
+                    'half-right'
                 ],
                 attibutes: [
                     {

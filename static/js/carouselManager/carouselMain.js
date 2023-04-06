@@ -8,6 +8,7 @@ export class Carousel {
         this.carousel.classList.add('carousel')
         this.carouselItemsDiv = this.carousel.children[0]
         this.carouselItems = this.carouselItemsDiv.children
+        this.timerAuto = 7000
     }
 
     build(config={}) {
@@ -65,41 +66,9 @@ export class Carousel {
 
                 ['mouseenter', 'mouseleave'].forEach(listener => (
                     this.carouselItemsDiv.addEventListener(listener, e => (
-                     this._setNavigationHoverAnimation(e, navigators => (
-                        this.slider.addEventListener('scrollend', e => {
-                            if (e.target.scrollLeft == 0) {
-                                navigators.forEach(navigator => {
-                                    switch (navigator.getAttribute('aria-label')) {
-                                        case 'carousel-prev':
-                                            navigator.style.setProperty('display', 'none')
-                                            break
-                                        case 'carousel-next':
-                                            navigator.style.setProperty('display', 'block')
-                                            break
-                                        default:
-                                            break
-                                    }
-                                })
-                            } else if (e.target.scrollLeft == e.target.scrollLeftMax) {
-                                navigators.forEach(navigator => {
-                                    switch (navigator.getAttribute('aria-label')) {
-                                        case 'carousel-prev':
-                                            navigator.style.setProperty('display', 'block')
-                                            break
-                                        case 'carousel-next':
-                                            navigator.style.setProperty('display', 'none')
-                                            break
-                                        default:
-                                            break
-                                    }
-                                })
-                            } else {
-                                navigators.forEach(navigator => navigator.style.setProperty('display', 'block'))
-                            }
-                        })
-                     ))
+                        this._setNavigationHoverAnimation(e)
                     ))
-                ))
+                 ))
                 break
 
             default:
@@ -216,18 +185,44 @@ export class Carousel {
     _navigatorClickListenerSlide(e) {
         const element = this._getNavigationRuler(e)
 
-        const maxScroll = this.slider.scrollLeftMax
-        const unit = (maxScroll / (this.slider.childElementCount - 4)) * 4
+        const itemPerRow = Number(getComputedStyle(this.slider).getPropertyValue('--item-per-row'))
+        const translateXPositions = []
+        for (let i = 0; i < this.slider.childElementCount; i += itemPerRow) {
+            translateXPositions.push(i * -100)
+        }
+
+        let slideToLeft = Number(this.slider.style.getPropertyValue('--slide-to-left'))
+        let currentTranslateX = translateXPositions.indexOf(slideToLeft)
 
         switch (element.getAttribute('aria-label')) {
             case 'carousel-prev':
-                this.slider.scrollLeft -= unit
+                currentTranslateX--
+                slideToLeft = translateXPositions[currentTranslateX]
+                if (typeof(slideToLeft) == 'number') this.slider.style.setProperty(
+                    '--slide-to-left', slideToLeft
+                )
                 break
             case 'carousel-next':
-                this.slider.scrollLeft += unit
+                currentTranslateX++
+                slideToLeft = translateXPositions[currentTranslateX]
+                if (typeof(slideToLeft) == 'number') this.slider.style.setProperty(
+                    '--slide-to-left', slideToLeft
+                )
                 break
             default:
                 break
+        }
+
+        const [prevNavigator, nextNavigator] = this.carouselItemsDiv.parentElement.querySelectorAll('.carousel-navigation-item')
+        if (currentTranslateX < 1) {
+            prevNavigator.style.setProperty('display', 'none')
+            nextNavigator.style.setProperty('display', 'block')
+        } else if (currentTranslateX >= translateXPositions.length - 1) {
+            prevNavigator.style.setProperty('display', 'block')
+            nextNavigator.style.setProperty('display', 'none')
+        } else {
+            prevNavigator.style.setProperty('display', 'block')
+            nextNavigator.style.setProperty('display', 'block')
         }
     }
 
@@ -236,10 +231,8 @@ export class Carousel {
         return oldIndex < newIndex ? 'left' : 'right'
     }
 
-    _setNavigationHoverAnimation(e, callback) {
+    _setNavigationHoverAnimation(e) {
         const navigators = this.carouselItemsDiv.parentElement.querySelectorAll('.carousel-navigation-item')
-
-        if (callback) callback(navigators)
 
         switch (e.type) {
             case 'mouseenter':
