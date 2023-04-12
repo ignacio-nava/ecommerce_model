@@ -12,6 +12,7 @@
   --color-error: red;
   --color-bg-header--dark: rgb(94, 93, 80);
   --color-border-light: #ececec;
+  --color-bg-light: #f4f1f1;
 
   --size-carousel-nav-item: 64px;
   --size-product-card-height: 21rem;
@@ -80,7 +81,12 @@ select {
 
 /* Colors */
 
-
+.bg-light {
+    background: var(--color-bg-light);
+}
+.bg-white {
+    background: var(--color-white);
+}
 
 .fc-white {
     color: var(--color-white);
@@ -133,6 +139,11 @@ select {
 .pad-y-100 {
     padding-top: 1rem;
     padding-bottom: 1rem;
+}
+
+.pad-y-200 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 .pad-100 {
     padding: 1rem;
@@ -779,9 +790,8 @@ select {
     height: 100%;
 }
 
-.product-offers {
-    background-color: #f4f1f1;
-    padding: 2rem 0;
+.section-products {
+    height: 40rem;
 }
 
 .product-price__offer {
