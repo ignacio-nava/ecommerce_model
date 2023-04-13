@@ -9,6 +9,22 @@ from store.models import Category, Product
 
 BASE_DIR = Path(__file__).resolve().parent
 
+def set_vars(*args):
+    '''
+    This function sets the required  variables
+    Defualt:
+        path_folder=data
+        output=products.csv
+    '''
+    vars = {
+        'path_folder': 'data',
+        'output': 'products.csv'
+    }
+    for arg in args:
+        key, value = arg.split('=')
+        vars[key] = value
+
+    return vars
 def normailize_price(price_str):
     price_list = [
         float(n)
@@ -43,7 +59,8 @@ def log_status(new_categories, new_products, end='\r', rejects=[], final=False):
             print(''.center(50, '·'))
 
 def run(*args):
-    file_path = BASE_DIR / 'data' / args[0]
+    vars = set_vars(*args)
+    file_path = BASE_DIR / vars['path_folder'] / vars['output']
 
     with open(file_path, 'r') as file:
         reader = csv.reader(file)
