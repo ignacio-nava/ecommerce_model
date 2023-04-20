@@ -9,8 +9,8 @@ export const navigationOptions = {
                 element: 'div',
                 classes: [
                     'carousel-navigation-item',
-                    'carousel-navigation-item',
-                    'carousel-left'
+                    'carousel-left',
+                    'half-right'
                 ],
                 styles: [
                     {
@@ -63,8 +63,8 @@ export const navigationOptions = {
                 element: 'div',
                 classes: [
                     'carousel-navigation-item',
-                    'carousel-navigation-item',
-                    'carousel-right'
+                    'carousel-right',
+                    'half-left'
                 ],
                 attibutes: [
                     {

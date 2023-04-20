@@ -42,6 +42,7 @@ export class Carousel {
                 break
 
             case 'slide':
+                this.carousel.style.setProperty('height', '30rem')
                 this.carouselItemsDiv.classList.add('carousel-slide')
                 const itemsCopy = [...this.carouselItems]
                 for (let i = 0; i < itemsCopy.length; i++) {
