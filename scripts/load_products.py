@@ -71,7 +71,7 @@ def run(*args):
         for row in reader:
             log_status(new_categories, new_products)
             category_name = row[1]
-            category_slug = '-'.join(category_name.lower().split(' '))
+            category_slug = '-'.join(category_name.lower().replace(',','').split(' '))
 
             category, is_new = Category.objects.get_or_create(
                 name=category_name,

@@ -16,6 +16,7 @@
   <!-- -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{% static 'js/bodyControllers.js' %}" defer></script>
   <script src="{% static 'js/navControllers.js' %}" defer></script>
   <script src="{% static 'js/flashControllers.js' %}" defer></script>
   <script src="{% static 'js/imageControllers.js' %}" defer></script>
@@ -122,6 +123,67 @@
     {% endfor %}
   {% endif %}
   </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content fc-white">
+        <div class="footer-cotent__item">
+          <div class="footer-content__item-title">
+            <h3>Customer Care</h3>
+          </div>
+          <div class="footer-content__item-body">
+            <ul role="list">
+              <li><a class="fc-white" href="#">FQA's</a></li>
+              <li><a class="fc-white" href="#">Terms of Service</a></li>
+              <li><a class="fc-white" href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-cotent__item">
+          <div class="footer-content__item-title">
+            <h3>My Account</h3>
+          </div>
+          <div class="footer-content__item-body">
+            <ul role="list" class="fc-white">
+              {% if not user.is_authenticated %}
+                <li><a href="{% url 'account:login-form'%}" class="fc-white">Sing In</a></li>
+                <li><a href="{% url 'account:registration-form'%}" class="fc-white">Register</a></li>
+              {% else %}
+                <li><a href="{% url 'account:update-form' %}" class="fc-white">Edit</a></li>
+                <li><a href="{% url 'account:logout' %}" class="fc-white">Logout</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <div class="footer-cotent__item">
+          <div class="footer-content__item-title">
+            <h3>Contact</h3>
+          </div>
+          <div class="footer-content__item-body">
+            <ul role="list" class="fc-white icon-container">
+              <li>
+                <svg class="icon">
+                  <use xlink:href="{% get_media_prefix %}images/social-icons.svg#icon-facebook"></use>
+                </svg>
+              </li>
+              <li>
+                <svg class="icon">
+                  <use xlink:href="{% get_media_prefix %}images/social-icons.svg#icon-linkedin"></use>
+                </svg>
+              </li>
+              <li>
+                <a href="https://github.com/ignacio-nava/ecommerce_model" target="_blank">
+                  <svg class="icon">
+                    <use xlink:href="{% get_media_prefix %}images/social-icons.svg#icon-github"></use>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
     $( document ).ready(() => setMessageHandler())

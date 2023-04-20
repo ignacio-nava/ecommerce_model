@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/carousel.css' %}">
+<script src="{% static 'js/carouselControllers.js' %}" type="module" defer></script>
+{% endblock %}
+
+{% block content %}
+  <section id="banners">
+    <div id="carousel-banners">
+      <div>
+        <div style="background-color: rgba(183, 85, 85, 0.5);"></div>
+        <div style="background-color: rgba(43, 43, 165, 0.5);"></div>
+        <div style="background-color: rgba(66, 170, 66, 0.5);"></div>
+        <div style="background-color: rgba(209, 209, 7, 0.5);"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-products pad-y-200 bg-light">
+    <div class="container" style="height: 100%;">
+      <div class="section-title">
+        <h1>Offers</h1>
+      </div>
+      <div id="carousel-offers">
+        <div>
+          {% for product in offers_products %}
+            <div>
+              <div class="product-card">
+                <div class="product-card__inner">
+                  <div class="product-card__inner-top">
+                    {% if product.image_external %}
+                      <img src="{{product.image_external}}" class="product_image"/>
+                    {% else %}
+                      <img src="{% get_media_prefix %}{{product.image}}" class="product_image"/>
+                    {% endif %}
+                  </div>
+                  <div class="product-card__inner-bottom">
+                    <p class="product-price">
+                      <span class="product-price__offer fs-400">${{ product.offer_price }}</span>
+                      <span class="product-price__strikethrough fs-200">${{ product.price }}</span>
+                      <span class="product-price__discount fs-200 bold">{{ product.discount }}% OFF</span>
+                    </p>
+                    <p class="product-title fs-200">
+                      {{ product.title }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-products pad-y-200 bg-white">
+    <div class="container" style="height: 100%;">
+      <div class="section-title">
+        <h1>By Category</h1>
+      </div>
+      <div class="pad-100">
+        <ul role="list" class="category-list gap-050">
+          {% for category in categories %}
+          <li class="category-list__item">
+            <div
+              class="category-list__item__inner h-100 w-100"
+              data-href="{{ category.get_absolute_url }}"
+              tabindex="{{ forloop.counter0 }}"
+              role="link"
+            >
+              <span>{{ category.name }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}
