@@ -1,5 +1,6 @@
 from random import randint
 
+from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -27,19 +28,41 @@ class ProductHomeView(View):
         }
         return render(request, self.template_name, context)
 
-class CategoryListView(ListView):
+class ByCategoryListView(View):
     paginate_by = 10
     model = Product
     context_object_name = 'products'
     template_name = 'store/product_list.html'
 
+    def get(self, request, slug):
+        category = Category.objects.get(slug=slug)
+        products = self.model.objects.all().filter(category__id=category.id)
 
+        paginator = Paginator(products, self.paginate_by)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
 
-    def get_queryset(self):
-        category_query = self.request.path.replace('/by-category/', '')
-        category = get_object_or_404(Category, slug=category_query)
-        queryset = super().get_queryset().filter(category__id=category.id)
-        return queryset
+        context = {
+            'page_obj': page_obj
+        }
+        return render(request, self.template_name, context)
+
+# class CategoryListView(ListView):
+#     paginate_by = 10
+#     model = Product
+#     context_object_name = 'products'
+#     template_name = 'store/product_list.html'
+
+#     def get_queryset(self):
+#         category_query = self.request.path.replace('/by-category/', '')
+#         category = get_object_or_404(Category, slug=category_query)
+#         queryset = super().get_queryset().filter(category__id=category.id)
+#         return queryset
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         print(dir(context['paginator']))
+#         return context
 
 class ProductDetailView(DetailView):
     model = Product

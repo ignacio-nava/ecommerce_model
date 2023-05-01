@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block head %}
+<script src="{% static 'js/paginatorControllers.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -10,7 +11,7 @@
   <section>
     <div class="container">
       <ul class="pad-100" role="list">
-        {% for product in products %}
+        {% for product in page_obj.object_list %}
         <li data-href="{{ product.get_absolute_url }}">
           <div class="card-h">
             <div class="card-h__left pad-100">
@@ -30,31 +31,43 @@
     </div>
   </section>
   <!-- Paginator -->
-  {% if is_paginated %}
+
+  <div class="paginator">
     {% if page_obj %}
-      <ul style="display: flex; gap: .5rem; list-style: none;">
-
+      <ul role="list">
         {% if page_obj.has_previous %}
-          <li><a href="?page={{ page_obj.previous_page_number }}">&lt;&lt;</a></li>
+          <div class="paginator__item-container">
+            <li>
+              <a class="fc-dark" href="?page={{ page_obj.previous_page_number }}">&lt;&lt;</a>
+            </li>
+          </div>
         {% endif %}
-        <li>
-        {% for page in pages %}
-          <a
-            href="?page={{page}}"
-            {% if page == page_obj.number %}
-              style="font-weight:bold;"
-            {%endif%}>
-            {{ page }}
-          </a>
-        {% endfor %}
-        </li>
-        {% if page_obj.has_next %}
-          <li><a href="?page={{ page_obj.next_page_number }}">&gt;&gt;</a></li>
-        {% endif %}
+        {% for page in page_obj.paginator.page_range %}
 
+          <div class="paginator__item-container"
+          {% if page == page_obj.number %}
+            data-active="true"
+          {%endif%}
+          >
+            <li>
+              <a class="fc-dark" href="?page={{page}}">
+                {{ page }}
+              </a>
+            </li>
+          </div>
+
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <div class="paginator__item-container">
+            <li>
+              <a class="fc-dark" href="?page={{ page_obj.next_page_number }}">&gt;&gt;</a>
+            </li>
+          </div>
+        {% endif %}
       </ul>
     {% endif %}
-  {% endif %}
+  </div>
+
 
 {% endblock %}
 

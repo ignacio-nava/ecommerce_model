@@ -1,24 +1,18 @@
-// Categories Controllers
-const categoryList = document.querySelector('.category-list')
-const categoryListChildren = [...categoryList.children].reverse()
+function fixHeight() {
+    const header = document.querySelector('header')
+    const main = document.querySelector('main')
+    const footer = document.querySelector('footer')
 
-function gridLastChildsCenter() {
-    const columnsCount = Number(getComputedStyle(categoryList).getPropertyValue('--columns-count'))
-    const modulus = categoryListChildren.length % columnsCount
-
-    for (element of categoryListChildren.slice(0, 5)) {
-        element.style.removeProperty('grid-column-end')
-    }
-
-    for (let i = 0; i < modulus; i++) {
-        const element = categoryListChildren[i]
-        element.style.setProperty('grid-column-end', `${-i-2}`)
-    }
+    const newHeight = window.innerHeight - (header.scrollHeight + footer.scrollHeight)
+    main.style.height = `${newHeight}px`
+    return
 }
-gridLastChildsCenter()
-window.addEventListener('resize', gridLastChildsCenter)
 
-categoryListChildren.forEach(item => item.addEventListener('click', e => {
-    const element = e.target.localName === 'span' ? e.target.parentElement : e.target
-    window.open(element.getAttribute('data-href'))
-}))
+document.addEventListener('DOMContentLoaded', e => {
+    const body = document.querySelector('body')
+
+    if (window.innerHeight < body.scrollHeight) return
+
+    fixHeight()
+    return
+})
