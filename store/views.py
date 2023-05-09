@@ -19,8 +19,9 @@ class ProductHomeView(View):
         categories = Category.objects.all().order_by('name')
         offers_products = Product.objects.order_by('?')[0:12]
         for product in offers_products:
-            discount = randint(5,20)
-            product.offer_price = round(product.price * (100 - discount) / 100, 2)
+            discount = randint(5, 20)
+            product.offer_price = round(
+                product.price * (100 - discount) / 100, 2)
             product.discount = discount
         context = {
             'categories': categories,
@@ -28,8 +29,10 @@ class ProductHomeView(View):
         }
         return render(request, self.template_name, context)
 
+
 class ByCategoryListView(View):
     paginate_by = 10
+    max_pages_by = 5
     model = Product
     context_object_name = 'products'
     template_name = 'store/product_list.html'
@@ -40,10 +43,19 @@ class ByCategoryListView(View):
 
         paginator = Paginator(products, self.paginate_by)
         page_number = request.GET.get("page")
+        if page_number is None:
+            page_number = 1
         page_obj = paginator.get_page(page_number)
 
+        custom_page_range = get_pages_to_display(
+            page_obj.paginator.page_range.__len__(),
+            self.max_pages_by,
+            int(page_number)
+        )
+
         context = {
-            'page_obj': page_obj
+            'page_obj': page_obj,
+            'custom_page_range': custom_page_range
         }
         return render(request, self.template_name, context)
 
@@ -64,9 +76,11 @@ class ByCategoryListView(View):
 #         print(dir(context['paginator']))
 #         return context
 
+
 class ProductDetailView(DetailView):
     model = Product
     context_object_name = 'product'
+
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
@@ -88,6 +102,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['submit_action'] = self.request.path.split('/')[1]
         return context
+
 
 class ProductUpateView(LoginRequiredMixin, UpdateView):
     model = Product

@@ -42,7 +42,7 @@
             </li>
           </div>
         {% endif %}
-        {% for page in page_obj.paginator.page_range %}
+        {% for page in custom_page_range %}
 
           <div class="paginator__item-container"
           {% if page == page_obj.number %}
