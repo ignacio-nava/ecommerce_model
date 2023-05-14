@@ -5,9 +5,14 @@ import sys
 
 import dotenv
 
+from utils.administrative_tasks import create_env_file
+
 
 def main():
     """Run administrative tasks."""
+    if not os.path.exists('.env'):
+        create_env_file()
+
     dotenv.read_dotenv()
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
