@@ -9,6 +9,7 @@ from store.models import Category, Product
 
 BASE_DIR = Path(__file__).resolve().parent
 
+
 def set_vars(*args):
     '''
     This function sets the required  variables
@@ -25,6 +26,8 @@ def set_vars(*args):
         vars[key] = value
 
     return vars
+
+
 def normailize_price(price_str):
     price_list = [
         float(n)
@@ -37,6 +40,7 @@ def normailize_price(price_str):
         price = price_list[0]
     return round(price, 2)
 
+
 def create_product(fields):
     product = Product(**fields)
     try:
@@ -45,11 +49,14 @@ def create_product(fields):
         return False
     return True
 
+
 def log_status(new_categories, new_products, end='\r', rejects=[], final=False):
-    print(f'Loading data... CATEGORIES {new_categories:2} | PRODUCTS {new_products:4}', end=end)
+    print(
+        f'Loading data... CATEGORIES {new_categories:2} | PRODUCTS {new_products:4}', end=end)
 
     if final:
-        print(f'\033[1mTotal Categories en DB: {Category.objects.all().count()}')
+        print(
+            f'\033[1mTotal Categories en DB: {Category.objects.all().count()}')
         print(f'Total Products en DB: {Product.objects.all().count()}\033[0m')
         rejects_count = len(rejects)
         if rejects_count > 0:
@@ -57,6 +64,7 @@ def log_status(new_categories, new_products, end='\r', rejects=[], final=False):
             for row in rejects:
                 print(f'\t- [{row[0]}]')
             print(''.center(50, '·'))
+
 
 def run(*args):
     vars = set_vars(*args)
@@ -71,7 +79,8 @@ def run(*args):
         for row in reader:
             log_status(new_categories, new_products)
             category_name = row[1]
-            category_slug = '-'.join(category_name.lower().replace(',','').split(' '))
+            category_slug = '-'.join(category_name.lower().replace(',',
+                                     '').split(' '))
 
             category, is_new = Category.objects.get_or_create(
                 name=category_name,
@@ -99,7 +108,7 @@ def run(*args):
         log_status(
             new_categories,
             new_products,
-            end=f' \033[1;32m[OK!]\033[0m\n',
+            end=f' \033[1;32mOK\033[0m\n',
             rejects=rows_rejected,
             final=True
         )
