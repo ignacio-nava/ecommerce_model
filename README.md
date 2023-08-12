@@ -22,6 +22,7 @@ Create and activate the virtual enviroment
 Run
 ```bash
   pip install -r requirements.txt
+  python manange.py makemigrations
   python manage.py migrate
   python manage.py createsuperuser
   python manage.py runscript load_products
