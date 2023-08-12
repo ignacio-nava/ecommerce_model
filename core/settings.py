@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(env.DEBUG))
+DEBUG = env.DEBUG
 
 ALLOWED_HOSTS = ['*']
 
@@ -144,7 +144,7 @@ LOGIN_REDIRECT_URL = '/account/dashboard'
 LOGIN_URL = '/account/login/'
 
 # Email setting
-if bool(int(env.IS_SENDING_EMAIL)):
+if env.IS_SENDING_EMAIL:
     MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = env.EMAIL_HOST
     EMAIL_PORT = env.EMAIL_PORT

@@ -4,8 +4,8 @@ from django.core.management.utils import get_random_secret_key
 
 ENVIROMENT = {
     "SECRET_KEY": 'django-insecure-' + get_random_secret_key(),
-    "DEBUG": 1,
-    "IS_SENDING_EMAIL": 0,
+    "DEBUG": True,
+    "IS_SENDING_EMAIL": False,
     "EMAIL_HOST": "",
     "EMAIL_PORT": "",
     "EMAIL_HOST_USER": "",
@@ -21,7 +21,8 @@ def create_env_file():
 
     with open('core/env.py', 'w') as file:
         for key, value in ENVIROMENT.items():
-            file.write(f"{key} = '{value}'\n")
+            value = str(value) if isinstance(value, bool) else f"'{value}'"
+            file.write(f"{key} = {value}\n")
         file.close()
 
     print('  Creating environment variables... \033[1;32mOK\033[0m')
