@@ -20,28 +20,28 @@ from .tokens import account_activation_token
 
 
 class OwnPasswordResetView(PasswordResetView):
-    template_name='account/user/password_reset_form.html'
-    success_url='password_reset_email_confirm'
-    email_template_name='account/user/password_reset_email.html'
-    form_class= PwResetForm
+    template_name = 'account/user/password_reset_form.html'
+    success_url = 'password_reset_email_confirm'
+    email_template_name = 'account/user/password_reset_email.html'
+    form_class = PwResetForm
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-             return redirect('account:dashboard')
+            return redirect('account:dashboard')
         return super().dispatch(request, *args, **kwargs)
 
 
 class OwnLoginView(LoginView):
-    template_name='account/registration/login.html'
-    form_class=UserLoginForm
+    template_name = 'account/registration/login.html'
+    form_class = UserLoginForm
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-             return redirect('account:dashboard')
+            return redirect('account:dashboard')
         return super().dispatch(request, *args, **kwargs)
 
 
-# Replace with ListView
+#  Replace with ListView
 @login_required
 def dashboard(request):
     return render(request, 'account/user/dashboard.html', {})
@@ -61,6 +61,7 @@ def account_update(request):
     ctx = {'form': form}
     return render(request, 'account/user/edit_details.html', ctx)
 
+
 @login_required
 def delete_user(request):
     if request.method == 'POST':
@@ -70,6 +71,7 @@ def delete_user(request):
         logout(request)
         return redirect('account:delete_confirmation')
     return redirect('account:dashboard')
+
 
 def account_registration(request):
     if request.user.is_authenticated:
@@ -93,7 +95,8 @@ def account_registration(request):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             }
-            body = render_to_string('account/registration/account_activation_email.html', ctx)
+            body = render_to_string(
+                'account/registration/account_activation_email.html', ctx)
             print(body)
             user.email_user(subject=subject, body=body)
             return HttpResponse('registered succesfully and activation sent')
@@ -109,7 +112,7 @@ def account_activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = UserBase.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
@@ -121,4 +124,4 @@ def account_activate(request, uidb64, token):
     else:
         messages.error(request, 'Invalid user verification')
         return redirect('/')
-        #return render(request, 'account/registration/activation_invalid.html')
+        # return render(request, 'account/registration/activation_invalid.html')
