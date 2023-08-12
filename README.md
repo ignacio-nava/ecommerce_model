@@ -4,13 +4,23 @@ It's a study project. I'm trying to employ as many technologies as possible. I c
 
 ## Deployment
 
-To deploy this project run
+To deploy this project follow this steps:
 
+#### 1)
+Clone the repository 
 ```bash
   git clone https://github.com/ignacio-nava/ecommerce_model.git
   cd ecommerce_model
-  python3 -m venv venv
-  source venv/bin/activate
+```
+
+#### 2)
+
+Create and activate the virtual enviroment
+
+#### 3)
+
+Run
+```bash
   pip install -r requirements.txt
   python manage.py migrate
   python manage.py createsuperuser
