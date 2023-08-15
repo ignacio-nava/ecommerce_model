@@ -12,6 +12,7 @@ def basket_summary(request):
     basket = Basket(request)
     return render(request, 'basket/summary.html', {'basket': basket})
 
+
 def basket_add(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
@@ -26,6 +27,7 @@ def basket_add(request):
             }
         })
 
+
 def basket_update(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
@@ -38,8 +40,10 @@ def basket_update(request):
         return JsonResponse({
             'qty': basket.__len__(),
             'totalItemPrice': basket.get_item_price_sum(product),
-            'totalPrice': basket.get_total_price()
+            'totalPrice': basket.get_total_price(),
+            'itemQty': basket.get_product_count(product)
         })
+
 
 def basket_delete(request):
     basket = Basket(request)

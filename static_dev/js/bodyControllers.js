@@ -8,11 +8,13 @@ function fixHeight() {
     return
 }
 
-document.addEventListener('DOMContentLoaded', e => {
+function normalizeHeight() {
     const body = document.querySelector('body')
 
     if (window.innerHeight < body.scrollHeight) return
 
     fixHeight()
     return
-})
+}
+
+document.addEventListener('DOMContentLoaded', normalizeHeight)

@@ -113,13 +113,17 @@ searchBox.addEventListener('focus', e => {
     }
 })
 
-searchBox.addEventListener('blur', e => {
+searchBox.addEventListener('focusout', e => {
+    navbarSearchForm.dispatchEvent(new Event('submit', {cancelable: true}))
     suggestionsBox.setAttribute('aria-hidden', true)
 })
 
 navbarSearchForm.addEventListener('submit', e => {
     e.preventDefault()
     const [active] = getActiveSuggestion()
+
+    if (!active) return
+
     searchBox.value = active ? active.getAttribute('data-value') : searchBox.value
     navbarSearchForm.submit()
 })

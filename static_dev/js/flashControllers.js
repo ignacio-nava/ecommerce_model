@@ -15,7 +15,7 @@ function showMessage(message, tags = 'success') {
     .on('click', e => {
         hiddenMessage(e)
     })
-    .appendTo('#main-content')
+    .appendTo('body')
 }
 
 function setMessageHandler() {

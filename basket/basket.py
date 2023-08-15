@@ -39,7 +39,8 @@ class Basket():
         product_id = str(product.id)
 
         if product_id in self.basket:
-            self.basket[product_id]['qty'] = self.basket[product_id].get('qty', 0) + qty
+            self.basket[product_id]['qty'] = self.basket[product_id].get(
+                'qty', 0) + qty
         else:
             self.basket[product_id] = {'price': str(product.price), 'qty': qty}
 
@@ -79,6 +80,12 @@ class Basket():
 
         if product_id in self.basket:
             return Decimal(self.basket[product_id]['price']) * self.basket[product_id]['qty']
+
+    def get_product_count(self, product):
+        product_id = str(product.id)
+
+        if product_id in self.basket:
+            return self.basket[product_id]['qty']
 
     def save(self):
         self.session.modified = True

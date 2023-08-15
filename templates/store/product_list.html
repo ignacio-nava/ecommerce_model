@@ -12,7 +12,8 @@
     <div class="container">
       <ul class="pad-100" role="list">
         {% for product in page_obj.object_list %}
-        <li data-href="{{ product.get_absolute_url }}">
+        <li>
+          <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: black;">
           <div class="card-h">
             <div class="card-h__left pad-100">
               {% if product.image_external %}
@@ -25,6 +26,7 @@
               <span>{{ product.title }} | ${{ product.price }}</span>
             </div>
           </div>
+          </a>
         </li>
         {% endfor %}
       </ul>
