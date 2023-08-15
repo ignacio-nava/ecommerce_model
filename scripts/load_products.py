@@ -70,7 +70,7 @@ def run(*args):
     vars = set_vars(*args)
     file_path = BASE_DIR / vars['path_folder'] / vars['output']
 
-    with open(file_path, 'r') as file:
+    with open(file_path, mode='r', encoding='uft8', errors='ignore') as file:
         reader = csv.reader(file)
         reader.__next__()
 
