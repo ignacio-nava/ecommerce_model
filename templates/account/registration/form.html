@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="accounts-container">
+  <div class="accounts-background"></div>
+  <div class="accounts-content">
+    <div class="accounts-form-box flex-column pad-200 gap-300">
+      {% if form_title %}
+        <div class="accounts-form__title">
+          <h1 class="fc-dark-form-account">{{ form_title|title }}</h1>
+        </div>
+      {% endif %}
+      {% if form_message %}
+        <p class="fc-dark-form-account">{{ form_message }}</p>
+      {% endif %}
+      {% if error_login_msg %}
+        <p style="color: red; font-size: .8rem;">{{ error_login_msg }}</p>
+      {% endif %}
+      {% if form or auth_options %}
+        <div class="flex-column gap-050">
+          {% if form %}
+            <form class="accounts-form flex-column gap-300" action="" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{next}}" />
+              <div class="accounts-form__inputs flex-column gap-300">
+                <!-- {{ form.as_div }} -->
+                {% for field in form %}
+                  <div class="accounts-form__inputs-input flex-column gap-050">
+                    {{ field }}
+                    {{ field.label_tag }}
+                    {% if field.errors %}
+                      <ol style="padding-left: 1rem;">
+                      {% for error in field.errors %}
+                          <li style="color: red; font-size: .8rem;">{{ error }}</li>
+                      {% endfor %}
+                      </ol>
+                    {% endif %}
+
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="accounts-form__submit flex-column gap-050">
+                <button type="submit" class="bg-dark-form-account">{{ submit_text|title }}</button>
+              </div>
+            </form>
+          {% endif %}
+          {% if auth_options %}
+            {% for auth_option in auth_options %}
+              <a
+                class="side-left-text fc-dark-form-account {{auth_option.class}}"
+                href="{{ auth_option.url }}"
+              >
+                {{ auth_option.innerHTML }}
+              </a>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const LOGIN = !Boolean("{{ login }}")
+
+  function makeElement({type, classList, attrs}) {
+    if (!type) return
+
+    const element = document.createElement('a')
+
+    classList && classList.forEach(classItem => element.classList.add(classItem))
+
+    attrs && Object.keys(attrs).forEach(key => (
+      element[key] = attrs[key]
+    ))
+    element.setAttribute("tabindex", "-1")
+    return element
+  }
+
+  const inputsDivs = document.querySelectorAll('.accounts-form__inputs-input')
+  inputsDivs.forEach(inputDiv => {
+
+    // Remove ":" from labels
+    const label = inputDiv.querySelector('label')
+    label.innerHTML = label.innerHTML.slice(0, label.innerHTML.length-1)
+
+    const input = inputDiv.querySelector('input')
+
+    if (input.type != "password") return
+
+    // Add forgotten password option
+    if (LOGIN) return
+
+    const element = makeElement({
+      type: "p",
+      classList: [
+        "side-left-text",
+        "fc-dark-form-account"
+      ],
+      attrs: {
+        href: "{% url 'account:password-reset-form' %}",
+        innerHTML: "Forgotten Password?"
+      }
+    })
+
+    if (!element) return
+
+    inputDiv.appendChild(element)
+  })
+</script>
+{% endblock %}

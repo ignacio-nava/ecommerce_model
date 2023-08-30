@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_nav_footer.html' %}
 
 {% load static %}
 
@@ -8,67 +8,67 @@
 
 {% block content %}
   <!-- Products -->
-  <section>
-    <div class="container">
-      <ul class="pad-100" role="list">
-        {% for product in page_obj.object_list %}
-        <li>
-          <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: black;">
-          <div class="card-h">
-            <div class="card-h__left pad-100">
-              {% if product.image_external %}
-                <img src="{{product.image_external}}" width="100" height="100"/>
-              {% else %}
-                <img src="{% get_media_prefix %}{{product.image}}" width="100" height="100"/>
-              {% endif %}
+    <section>
+      <div class="container">
+        <ul class="pad-100" role="list">
+          {% for product in page_obj.object_list %}
+          <li>
+            <a href="{{ product.get_absolute_url }}" style="text-decoration: none; color: black;">
+            <div class="card-h">
+              <div class="card-h__left pad-100">
+                {% if product.image_external %}
+                  <img src="{{product.image_external}}" width="100" height="100"/>
+                {% else %}
+                  <img src="{% get_media_prefix %}{{product.image}}" width="100" height="100"/>
+                {% endif %}
+              </div>
+              <div class="card-h__right pad-100">
+                <span>{{ product.title }} | ${{ product.price }}</span>
+              </div>
             </div>
-            <div class="card-h__right pad-100">
-              <span>{{ product.title }} | ${{ product.price }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+    <!-- Paginator -->
+
+    <div class="paginator">
+      {% if page_obj %}
+        <ul role="list">
+          {% if page_obj.has_previous %}
+            <div class="paginator__item-container">
+              <li>
+                <a class="fc-dark" href="?page={{ page_obj.previous_page_number }}">&lt;&lt;</a>
+              </li>
             </div>
-          </div>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
+          {% endif %}
+          {% for page in custom_page_range %}
+
+            <div class="paginator__item-container"
+            {% if page == page_obj.number %}
+              data-active="true"
+            {%endif%}
+            >
+              <li>
+                <a class="fc-dark" href="?page={{page}}">
+                  {{ page }}
+                </a>
+              </li>
+            </div>
+
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <div class="paginator__item-container">
+              <li>
+                <a class="fc-dark" href="?page={{ page_obj.next_page_number }}">&gt;&gt;</a>
+              </li>
+            </div>
+          {% endif %}
+        </ul>
+      {% endif %}
     </div>
-  </section>
-  <!-- Paginator -->
-
-  <div class="paginator">
-    {% if page_obj %}
-      <ul role="list">
-        {% if page_obj.has_previous %}
-          <div class="paginator__item-container">
-            <li>
-              <a class="fc-dark" href="?page={{ page_obj.previous_page_number }}">&lt;&lt;</a>
-            </li>
-          </div>
-        {% endif %}
-        {% for page in custom_page_range %}
-
-          <div class="paginator__item-container"
-          {% if page == page_obj.number %}
-            data-active="true"
-          {%endif%}
-          >
-            <li>
-              <a class="fc-dark" href="?page={{page}}">
-                {{ page }}
-              </a>
-            </li>
-          </div>
-
-        {% endfor %}
-        {% if page_obj.has_next %}
-          <div class="paginator__item-container">
-            <li>
-              <a class="fc-dark" href="?page={{ page_obj.next_page_number }}">&gt;&gt;</a>
-            </li>
-          </div>
-        {% endif %}
-      </ul>
-    {% endif %}
-  </div>
 
 
 {% endblock %}

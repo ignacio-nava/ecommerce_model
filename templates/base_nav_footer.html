@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_nav_footer %}
+<script src="{% static 'js/bodyControllers.js' %}" defer></script>
+<script src="{% static 'js/navControllers.js' %}" defer></script>
+<script src="{% static 'js/flashControllers.js' %}" defer></script>
+<script src="{% static 'js/imageControllers.js' %}" defer></script>
+<!-- {% if search %} -->
+  <script src="{% static 'js/searchControllers.js' %}" defer></script>
+<!-- {% endif %} -->
+{% endblock %}
+
+{% block nav %}
+  <header class="header">
+    <div class="primary-navigation header-container">
+      <a href="{% url 'store:product_all' %}" class="logo">eCom</a>
+      {% if search %}
+        <div class="navigation-form">
+          <form class="search-form" method="GET" action="/" id="navbar-search-form">
+            <input
+              type="text"
+              name="search"
+              id="search"
+              class="search-input"
+              autocomplete="off"
+              aria-controls="suggestion-list"
+            >
+            <button type="submit" class="search-button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <div id="suggestions" class="suggestions" aria-hidden="true">
+              <ul id="suggestions-list" class="flex-column pad-y-100" role="list"></ul>
+            </div>
+          </form>
+        </div>
+      {% endif %}
+      <div class="navigation-wrapper">
+        <div class="secondary-navigation-toggle">
+          <button class="navigation-toggle-button">
+            <div class="hamburger"></div>
+          </button>
+        </div>
+        <div class="account-access fs-200">
+          {% if not user.is_authenticated %}
+            <a href="{% url 'account:registration-form'%}" class="fc-white">
+              Register
+            </a>
+            <span>/</span>
+            <a href="{% url 'account:login-form'%}" class="fc-white">
+              Login
+            </a>
+          {% else %}
+            <a href="{% url 'account:dashboard' %}" class="fc-white">
+              {{ user.email }}
+            </a>
+            <div>
+              <button id="user-options-toggle" class="user-options-toggle fs-300">
+                <i class="fa-solid fa-caret-down fc-white"e></i>
+              </button>
+              <div id="user-options" class="user-options">
+                <ul class="pad-y-050" role="list">
+                  <li class="pad-y-050">
+                    <a href="{% url 'account:update-form' %}" class="fc-dark pad-y-030 pad-x-100">
+                      <i class="fa-solid fa-pen"></i>
+                      <span>Edit</span>
+                    </a>
+                  </li>
+                  <li class="pad-y-050">
+                    <a href="{% url 'account:logout' %}" class="fc-dark pad-y-030 pad-x-100">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                      <span>Logout</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="basket-access">
+          <a href="{% url 'basket:basket_summary' %}">
+            <i class="fa-solid fa-cart-shopping fc-white"></i>
+          </a>
+          {% if basket.get_count_items < 1 %}
+            <div class="in-cart-shopping" style="display: none;">
+          {% else %}
+            <div class="in-cart-shopping">
+          {% endif %}
+            <span id="cart-count-items">{{ basket.get_count_items }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block footer %}
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content fc-white">
+        <div class="footer-cotent__item">
+          <div class="footer-content__item-title">
+            <h3>Customer Care</h3>
+          </div>
+          <div class="footer-content__item-body">
+            <ul role="list">
+              <li><a class="fc-white" href="#">FQA's</a></li>
+              <li><a class="fc-white" href="#">Terms of Service</a></li>
+              <li><a class="fc-white" href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-cotent__item">
+          <div class="footer-content__item-title">
+            <h3>My Account</h3>
+          </div>
+          <div class="footer-content__item-body">
+            <ul role="list" class="fc-white">
+              {% if not user.is_authenticated %}
+                <li><a href="{% url 'account:login-form'%}" class="fc-white">Sing In</a></li>
+                <li><a href="{% url 'account:registration-form'%}" class="fc-white">Register</a></li>
+              {% else %}
+                <li><a href="{% url 'account:update-form' %}" class="fc-white">Edit</a></li>
+                <li><a href="{% url 'account:logout' %}" class="fc-white">Logout</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <div class="footer-cotent__item">
+          <div class="footer-content__item-title">
+            <h3>Contact</h3>
+          </div>
+          <div class="footer-content__item-body">
+            <ul role="list" class="fc-white icon-container">
+              <li>
+                <svg class="icon">
+                  <use xlink:href="{% get_media_prefix %}images/social-icons.svg#icon-facebook"></use>
+                </svg>
+              </li>
+              <li>
+                <svg class="icon">
+                  <use xlink:href="{% get_media_prefix %}images/social-icons.svg#icon-linkedin"></use>
+                </svg>
+              </li>
+              <li>
+                <a href="https://github.com/ignacio-nava/ecommerce_model" target="_blank">
+                  <svg class="icon">
+                    <use xlink:href="{% get_media_prefix %}images/social-icons.svg#icon-github"></use>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $( document ).ready(() => setMessageHandler())
+  </script>
+{% endblock %}

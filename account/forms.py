@@ -13,19 +13,23 @@ class UserLoginForm(AuthenticationForm):
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control mb-3',
-                'placeholder': 'Username',
+                # 'placeholder': 'Username',
                 'id': 'login-username'
             }
-        )
+        ),
+        label="Email Address",
+        required=True
     )
     password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Password',
+                # 'placeholder': 'Password',
                 'id': 'login-pwd',
             }
-        )
+        ),
+        label="Password",
+        required=True
     )
 
 
@@ -42,7 +46,8 @@ class RegistrationForm(forms.ModelForm):
         error_messages={'required': 'Sorry, you will need an email'}
     )
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
         model = UserBase
@@ -58,7 +63,8 @@ class RegistrationForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if UserBase.objects.filter(email=email).exists():
-            raise forms.ValidationError('Please use another Email, that is already taken')
+            raise forms.ValidationError(
+                'Please use another Email, that is already taken')
         return email
 
     def clean_password2(self):
@@ -67,15 +73,16 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Passwords do not match.')
         return cd['password2']
 
+
 class UserEditForm(forms.ModelForm):
     email = forms.EmailField(
         label='Account email (can not be changed)',
         max_length=200,
         widget=forms.TextInput(
             attrs={
-                #'class': 'form-control mb-3',
-                #'placeholder': 'email',
-                #'id': 'form-email',
+                # 'class': 'form-control mb-3',
+                # 'placeholder': 'email',
+                # 'id': 'form-email',
                 'readonly': 'readonly'
             }
         )
@@ -116,6 +123,7 @@ class PwResetForm(PasswordResetForm):
             attrs={}
         )
     )
+
 
 class PwdResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(

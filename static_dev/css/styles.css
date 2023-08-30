@@ -15,6 +15,8 @@
   --color-bg-light: #f4f1f1;
   --color-bg-footer: #3e3d3d;
 
+  --color-form-account-dark: #535252;
+
   --size-carousel-nav-item: 64px;
   --size-product-card-height: 21rem;
   --size-padding-x-card: .7rem;
@@ -88,12 +90,18 @@ select {
 .bg-white {
     background: var(--color-white);
 }
+.bg-dark-form-account {
+    background-color: var(--color-form-account-dark);
+}
 
 .fc-white {
     color: var(--color-white);
 }
 .fc-dark {
     color: rgb(17, 17, 17);
+}
+.fc-dark-form-account {
+    color: var(--color-form-account-dark);
 }
 
 /* Fonts  */
@@ -158,6 +166,9 @@ select {
 .pad-100 {
     padding: 1rem;
 }
+.pad-200 {
+    padding: 2rem;
+}
 
 
 .gap-025 {
@@ -168,6 +179,12 @@ select {
 }
 .gap-100 {
     gap: 1rem
+}
+.gap-200 {
+    gap: 2rem;
+}
+.gap-300 {
+    gap: 3rem;
 }
 
 /* messages */
@@ -902,6 +919,100 @@ select {
         opacity: .7;
         font-weight: bolder;
     }
+}
+
+/* Accounts */
+
+.accounts-container {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.accounts-background {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(#424141, #808080a6), url("/media/images/landscape02.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: initial;
+    position: absolute;
+}
+.accounts-background::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #6459489c;
+}
+.accounts-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.accounts-form-box {
+    background: white;
+    width: 95%;
+    max-width: 552px;
+    border-radius: 16px;
+    box-shadow: 2px 2px 8px #2d2d2d;
+}
+.accounts-form__title > h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+.accounts-form__inputs > div {
+    position: relative;
+}
+.accounts-form__inputs > div > label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1rem;
+    transition: .3s;
+    color: grey;
+}
+.accounts-form__inputs > div > input:focus + label,
+.accounts-form__inputs > div > input:valid + label {
+    font-size: 0.6rem;
+    font-weight: lighter;
+    top: -24px;
+    color: inherit;
+}
+.accounts-form__inputs > div > input {
+    border: none;
+    border-bottom: 1px solid lightgrey;
+}
+.accounts-form__inputs > div > input:focus {
+    outline: none;
+    border-bottom: 1px solid grey;
+}
+.side-left-text {
+    align-self: end;
+    font-size: 0.7rem;
+    text-decoration: none;
+}
+.side-left-text:hover {
+    opacity: .7;
+}
+.accounts-form__submit > button {
+    border: none;
+    padding: .8rem;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.accounts-form__submit > button:hover {
+    opacity: .7;
 }
 
 /* Footer */
