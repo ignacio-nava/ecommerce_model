@@ -1,0 +1,15 @@
+{% autoescape off %}
+Hi {{ user.user_name }},
+
+Your purchase was successful.
+
+Detail:
+{% for item in items %}
+- {{ item.each_product.title|title }} | {{ item.quantity }} | ${{ item.price }}
+{% endfor %}
+
+TOTAL: {{ order.total_with_shipping }}
+
+Your Purchase:
+http://{{ domain }}{% url 'basket:order' pk=order.id %}
+{% endautoescape %}

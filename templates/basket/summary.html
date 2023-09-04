@@ -2,141 +2,137 @@
 
 {% load static %}
 
+{% load basket_tags %}
+
+{% block head %}
+<script src="{% static 'js/basketElements.js' %}" defer></script>
+<script src="{% static 'js/basketControllers.js' %}" defer></script>
+{% endblock %}
+
 {% block content %}
-  <div id="items-in-basket">
-    {% for item in basket %}
-      <div>
-        <h3>{{ item.product.title|title }}</h3>
-        {% if item.product.image_external %}
-          <img src="{{item.product.image_external}}" class="product_image" width="100" height="100"/>
-        {% else %}
-          <img src="{% get_media_prefix %}{{item.product.image}}" class="product_image" width="100" height="100"/>
-        {% endif %}
-        <p class="product-info">Quantity: <span id="item-qty">{{ item.total_item_qty }}</span> | Price: $<span id="item-price">{{ item.total_item_price }}</span> |
-          <select name="" id="qty-select">
-            <option selected>{{ item.total_item_qty }}</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-          <button id="update-to-basket-button" value="{{ item.product.id }}">Update Basket</button>
-          |
-          <button
-            id="delete-to-basket-button"
-            value="{{ item.product.id }}"
-            style="background:red; color:white; border: none; border-radius: 100%; width: 32px; height: 32px; cursor: pointer;"
-          >x</button>
-        </p>
+  {% with px_img_value="100" %}
+  <section class="basket-container" id="items-in-basket" style="--px-img-value: {{ px_img_value }}">
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="basket-table gap-100">
+        <div class="flex-column basket-column aling-self-start">
+          <div class="flex-row basket-row bold" data-role="title">
+            <div class="basket-cell" data-role="title" data-column="item"><div><h2>Item</h2></div></div>
+            <div class="basket-cell" data-role="title" data-column="price"><div><h2>Price</h2></div></div>
+            <div class="basket-cell" data-role="title" data-column="quantity"><div><h2>Quantity</h2></div></div>
+            <div class="basket-cell" data-role="title" data-column="subtotal"><div><h2>Subtotal</h2></div></div>
+          </div>
+
+          {% for product in basket %}
+          <div class="flex-row basket-row lighter" data-role="content">
+            <div class="basket-cell flex-row gap-100" data-role="content" data-column="item">
+              <div class="w-40 h-100">
+                {% if product.product.image_external %}
+                  <img src="{{ product.product.image_external }}" alt="product_image" class="w-100 object-fit-contain" width="{{ px_img_value }}" height="{{ px_img_value }}"/>
+                {% else %}
+                  <img src="{% get_media_prefix %}{{ product.product.image }}" alt="product_image" class="w-100 object-fit-contain" width="{{ px_img_value }}" height="{{ px_img_value }}"/>
+                {% endif %}
+              </div>
+              <div class="w-60 h-100">
+                <p>{{ product.product.title|title }}</p>
+              </div>
+            </div>
+            <div class="basket-cell" data-role="content" data-column="price"><div><p>${{ product.product.price }}</p></div></div>
+            <div class="basket-cell" data-role="content" data-column="quantity">
+              <div>
+                <select class="pad-x-050" name="" id="qty-select" data-product-id="{{ product.product.id }}">
+                  {% for i in product.total_item_qty|quantity_range %}
+                    {% if i == product.total_item_qty %}
+                      <option value="{{ i }}" selected>{{ i }}</option>
+                    {% else %}
+                      <option value="{{ i }}">{{ i }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="basket-cell flex-column aling-items-center justify-content-between" data-role="content" data-column="subtotal">
+              <div>
+                <p>${{ product.total_item_price }}</p>
+              </div>
+              <div>
+                <button class="button-romeve-item-basket bold" value="{{ product.product.id }}">REMOVE</button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+        <div
+          id="purchase-summary"
+          class="flex-column basket-column aling-self-start"
+          style="
+            --custom-border-color: grey;
+            --custom-background-color: rgb(223, 223, 223);
+          "
+        >
+          <div class="flex-row basket-row lighter justify-content-between" data-role="title">
+            <div class="basket-cell"><div><h2>Subtotal</h2></div></div>
+            <div class="basket-cell" id="subtotal"><div><h2>${{ basket.get_total_price }}</h2></div></div>
+          </div>
+          {% if user.is_authenticated %}
+          <div class="flex-row pad-y-200  lighter" data-role="title">
+            <div class="basket-cell w-100">
+              <div class="checkout-form flex-column gap-100 fs-200 w-100">
+                <div class="flex-row gap-050 aling-items-center">
+                  <h2 class="bold">Recipient Information</h2>
+                </div>
+                <div class="flex-column gap-050" data-visible="false">
+                  {% for field in form %}
+                    {% if field.label != 'Shipping method' %}
+                      <div class="flex-column summary-input-information">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                          <ol style="padding-left: 1rem;">
+                          {% for error in field.errors %}
+                              <li style="color: red; font-size: .8rem;">{{ error }}</li>
+                          {% endfor %}
+                          </ol>
+                        {% endif %}
+                      </div>
+                      <hr>
+                    {% endif %}
+                  {% endfor %}
+                  <div class="flex-column summary-input-information">
+                    {{ form.shipping_method.label_tag }}
+                    <select name="shipping_method" id="id_shipping_method" required>
+                      {% for value, text in form.fields.shipping_method.choices %}
+                        {% if text.obj %}
+                          <option value="{{ value }}" data-price="{{ text.obj.price }}">{{ text.obj }} + ${{ text.obj.price }}</option>
+                        {% else %}
+                          <option value="{{ value }}" data-price="0">{{ text }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-row basket-row justify-content-between bold" data-role="title">
+            <div class="basket-cell"><div><h2>Total</h2></div></div>
+            <div class="basket-cell" id="total"><div><h2>${{ basket.get_total_price }}</h2></div></div>
+          </div>
+          {% endif %}
+          <div class="flex-row checkout-container">
+            <button class="button-checkout bold fs-250">CHECKOUT</button>
+          </div>
+        </div>
       </div>
-      <br>
-      <hr>
-    {% endfor %}
-    <h1 id="total-price">SUBTOTAL ==> ${{ basket.get_total_price }}</h1>
-  </div>
+    </form>
+  </section>
+  {% endwith %}
 
   <script>
-    const updateBasketCount = qty => {
-      const inCartItems = $('.in-cart-shopping')
-      document.querySelector('#cart-count-items').innerHTML = qty
-      qty > 0 ? inCartItems.show() : inCartItems.hide()
-    }
-
-    const setUpdateHandler = button => {
-      const qtySelector = button.parentElement.querySelector('#qty-select')
-      $.ajax({
-        type: 'POST',
-        url: '{% url "basket:basket_update" %}',
-        data: {
-          productId: button.value,
-          productQty: qtySelector.options[qtySelector.selectedIndex].value,
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-          action: 'post'
-        },
-        success: json => {
-          const itemPriceHolder = button.parentElement.querySelector('#item-price')
-          itemPriceHolder.innerHTML = json.totalItemPrice
-
-          const totalPriceHolder = document.querySelector('#total-price')
-          totalPriceHolder.innerHTML = `SUBTOTAL ==> $${json.totalPrice}`
-
-          const productQty = button.parentElement.querySelector('#item-qty')
-          productQty.innerHTML = json.itemQty
-
-          updateBasketCount(json.qty)
-          showMessage('Updated Product')
-        },
-        error: (xhr, errormsg, err) => {
-          console.log(errormsg)
-        }
-      })
-    }
-
-    setDeleteHandler = button => {
-      $.ajax({
-        type: 'POST',
-        url: '{% url "basket:basket_delete" %}',
-        data: {
-          productId: button.value,
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-          action: 'post'
-        },
-        success: json => {
-          $('#items-in-basket').empty()
-          let htmlData = []
-          json.items.forEach(item => {
-            const imgSrc = item.product.image_external || `/media/${item.product.image}`
-            htmlData.push(`<div>
-                            <h3 style="text-transform: capitalize;">${item.product.title}</h3>
-                            <img src="${imgSrc}" width="100" height="100"/>
-                            <p>Quantity: ${item.totalItemQty} | Price: $<span id="item-price">${item.totalItemPrice}</span> |
-                              <select name="" id="qty-select">
-                                <option selected>${item.totalItemQty}</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                              </select>
-                              <button id="update-to-basket-button" value="${item.product.id}">Update Basket</button>
-                              |
-                              <button
-                                id="delete-to-basket-button"
-                                value="${item.product.id}"
-                                style="background:red; color:white; border: none; border-radius: 100%; width: 32px; height: 32px; cursor: pointer;"
-                              >x</button>
-                            </p>
-                          </div>
-                          <br>
-                          <hr>
-            `)
-          })
-          htmlData.push(`<h1 id="total-price">SUBTOTAL ==> $${json.totalPrice}</h1>`)
-          $('<div/>', {
-            html: htmlData.join("")
-          }).appendTo('#items-in-basket')
-          updateBasketCount(json.qty)
-          setOwnListeners()
-          showMessage('Deleted Product')
-          normalizeHeight()
-        },
-        error: (xhr, errormsg, err) => {
-          console.log(errormsg)
-        }
-      })
-    }
-
-    setOwnListeners = () => {
-      const updateButtons = document.querySelectorAll('#update-to-basket-button')
-      updateButtons.forEach(button => {
-        button.addEventListener('click', () => setUpdateHandler(button))
-      })
-
-      const deleteButtons = document.querySelectorAll('#delete-to-basket-button')
-      deleteButtons.forEach(button => {
-        button.addEventListener('click', () => setDeleteHandler(button))
-      })
-    }
-
-    setOwnListeners()
+    var urlBasketUpdate = '{% url "basket:basket_update" %}'
+    var urlBasketDelete = '{% url "basket:basket_delete" %}'
+    var csrfToken = '{{ csrf_token }}'
   </script>
 {% endblock %}

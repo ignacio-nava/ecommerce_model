@@ -72,11 +72,14 @@ class OwnLoginView(LoginView):
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
-        next_url = ('/').join(self.request.META['HTTP_REFERER'].split('/')[3:])
-        if next_url == 'account/password_reset_complete/':
-            return super().get_context_data(**kwargs)
         context = super().get_context_data()
-        context['next'] = '/' + next_url
+        if self.request.META.get('HTTP_REFERER'):
+            next_url = (
+                '/').join(self.request.META['HTTP_REFERER'].split('/')[3:])
+            if next_url == 'account/password_reset_complete/':
+                return super().get_context_data(**kwargs)
+
+            context['next'] = '/' + next_url
         return context
 
 
@@ -144,7 +147,7 @@ def account_registration(request):
             }
             body = render_to_string(
                 'account/registration/account_activation_email.html', ctx)
-            print(body)
+            # print(body)
             user.email_user(subject=subject, body=body)
             context = {
                 'form_message': 'Registered succesfully and activation sent'

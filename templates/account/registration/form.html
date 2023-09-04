@@ -68,7 +68,7 @@
   function makeElement({type, classList, attrs}) {
     if (!type) return
 
-    const element = document.createElement('a')
+    const element = document.createElement(type)
 
     classList && classList.forEach(classItem => element.classList.add(classItem))
 
@@ -94,7 +94,7 @@
     if (LOGIN) return
 
     const element = makeElement({
-      type: "p",
+      type: "a",
       classList: [
         "side-left-text",
         "fc-dark-form-account"

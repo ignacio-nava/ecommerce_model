@@ -112,6 +112,9 @@ select {
 .fs-200 {
     font-size: 0.7rem;
 }
+.fs-250 {
+    font-size: 0.8rem;
+}
 .fs-300 {
     font-size: 1rem;
 }
@@ -120,8 +123,11 @@ select {
     font-size: 1.2rem;
 }
 
+.lighter {
+    font-weight: lighter;
+}
 .bold {
-    font-weight: 800;
+    font-weight: bold;
 }
 
 /* sizes */
@@ -129,12 +135,29 @@ select {
 .h-100 {
     height: 100%;
 }
+.w-30 {
+    width: 30%;
+}
+.w-40 {
+    width: 40%;
+}
+.w-60 {
+    width: 60%;
+}
+.w-70 {
+    width: 70%;
+}
 .w-100 {
     width: 100%;
 }
 
 
-
+.pad-bot-200 {
+    padding-bottom: 2rem;
+}
+.pad-top-200 {
+    padding-top: 2rem;
+}
 .pad-y-030 {
     padding-top: .3rem;
     padding-bottom: .3rem;
@@ -149,7 +172,14 @@ select {
 .pad-l-050 {
     padding-left: .5rem;
 }
+.pad-l-200 {
+    padding-left: 2rem;
+}
 
+.pad-x-050 {
+    padding-left:.5rem;
+    padding-right:.5rem;
+}
 .pad-x-100 {
     padding-left:1rem;
     padding-right:1rem;
@@ -527,19 +557,6 @@ select {
 
 .navigation-item > a {
     text-decoration: none;
-}
-
-
-/* Utility classes */
-
-.header-container {
-    width: 95%;
-    margin-inline: auto;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
 }
 
 /* Carousel */
@@ -1146,9 +1163,241 @@ select {
     text-decoration: none;
 }
 
+
+/* Summary */
+
+.basket-container {
+    width: 97%;
+    margin: auto;
+    margin-top: 2rem;
+    --size-img: var(--px-img-value)
+}
+@media (min-width: 70em) {
+    .basket-container {
+        width: 90%;
+    }
+}
+
+.basket-table {
+    display: flex;
+    flex-direction: column;
+}
+.basket-table > div {
+    width: 100%;
+}
+@media (min-width: 70em) {
+    .basket-table {
+        flex-direction: row;
+    }
+    .basket-table > div:first-of-type {
+        width: 70%;
+    }
+    .basket-table > div:last-of-type {
+        width: 30%;
+    }
+}
+
+.basket-column {
+    padding: 1rem 2rem;
+    background-color: var(--custom-background-color, transparent);
+    border: 1px solid var(--custom-border-color, transparent)
+}
+@media (min-width: 70em) {
+    .basket-column {
+        padding: 1rem;
+    }
+}
+
+.basket-row {
+    justify-content: var(--custom-justify-content, none);
+    border-bottom: 1px solid #8080808f;
+}
+
+.basket-row[data-role="title"] {
+    min-height: var(--custom-min-height, 32px);
+    max-height: var(--custom-max-height, 32px);
+    border-top: 1px solid #8080808f;
+}
+.basket-row[data-role="content"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* min-height: var(--custom-min-height, 128px); */
+    padding: 1rem 0;
+}
+
+.basket-cell {
+    display: flex;
+    justify-content: center;
+}
+.basket-cell[data-role="title"] {
+    display: flex;
+    align-items: center;
+    font-size: .8rem;
+}
+.basket-cell[data-role="content"] {
+    height: calc(var(--size-img)*1px);
+    font-size: .6rem;
+}
+@media (min-width: 50em) {
+    .basket-cell[data-role="title"] {
+        font-size: 1rem;
+    }
+    .basket-cell[data-role="content"] {
+        font-size: .7rem;
+    }
+}
+.basket-cell[data-column="item"] {
+    width: 40%;
+}
+.basket-cell[data-column="price"] {
+    width: 15%;
+}
+.basket-cell[data-column="quantity"] {
+    width: 15%;
+}
+.basket-cell[data-column="subtotal"] {
+    width: 30%;
+}
+.button-romeve-item-basket {
+    background: none;
+    border: 1px solid black;
+    padding: .3rem;
+    cursor: pointer;
+    transition: border-color .2s;
+}
+.button-romeve-item-basket:hover {
+    border: 1px solid black;
+}
+.button-romeve-item-basket:active {
+    border: 1px solid black;
+    background-color: #f3f3f3a7;
+    box-shadow: inset 0px 0px 4px grey;
+}
+@media (min-width: 70em) {
+    .button-romeve-item-basket {
+        border: 1px solid transparent;
+        border-bottom: 1px solid black;
+    }
+}
+
+.checkout-form i {
+    font-size: .8rem;
+}
+#shipping-method__options {
+    transition: transform .3s;
+    transform-origin: top;
+}
+#shipping-method__options[data-visible="false"] {
+    transform: scaleY(0);
+    max-height: 0;
+}
+#shipping-method__options[data-visible="true"] {
+    transform: scaleY(1);
+    max-height: 100%;
+}
+
+.shipping-method input[type="radio"] {
+    position: relative;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    background-color: white;
+    cursor: pointer;
+}
+.shipping-method input[type="radio"]:hover {
+    background: #9faab7;
+}
+.shipping-method input[type="radio"]:checked {
+    background: #40e0d0;
+}
+.shipping-method input[type="radio"]:checked::before {
+    width: 1rem;
+    height: 1rem;
+    display:flex;
+    content: '\f00c';
+    font-size: .8rem;
+    color: white;
+    font-weight:bold;
+    position: absolute;
+    align-items:center;
+    justify-content:center;
+    font-family:'Font Awesome 6 Free';
+}
+
+.checkout-container {
+    padding: 1rem 0;
+}
+.button-checkout {
+    background: none;
+    padding: .4rem;
+    cursor: pointer;
+    border: 2px solid black;
+    transition: border-color .2s;
+}
+@media (min-width: 70em) {
+    .button-checkout {
+        border: 2px solid transparent;
+        border-bottom: 2px solid black;
+    }
+}
+
+.button-checkout:hover {
+    border: 2px solid black;
+}
+.button-checkout:active {
+    border: 2px solid black;
+    background-color: #f3f3f3a7;
+    box-shadow: inset 0px 0px 4px grey;
+}
+
+.summary-input-information {
+    gap: .3rem;
+}
+.summary-input-information > input,
+.summary-input-information > select  {
+    width: 50%;
+    margin-left: .3rem;
+}
+hr {
+    border: none;
+    border-top: 1px solid #8080804a;
+}
+
+/* Utility classes */
+
 .container {
-    width: 90%;
-    max-width: 1100px;
+    width: var(--custom-width, 90%);
+    max-width: var(--custom-max-size, 1100px);
     margin: auto;
 }
 
+.header-container {
+    width: 95%;
+    margin-inline: auto;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.object-fit-contain {
+    object-fit: contain;
+}
+.aling-items-center {
+    align-items: center;
+}
+.aling-self-start {
+    align-self: start;
+}
+.justify-content-between {
+    justify-content: space-between;
+}
+.justify-content-start {
+    justify-content: start !important;
+}

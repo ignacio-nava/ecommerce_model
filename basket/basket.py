@@ -63,7 +63,6 @@ class Basket():
 
         if product_id in self.basket:
             del self.basket[product_id]
-            print(self.basket)
             self.save()
 
     def get_total_price(self):
@@ -86,6 +85,12 @@ class Basket():
 
         if product_id in self.basket:
             return self.basket[product_id]['qty']
+
+    def clear_basket(self):
+        ids = list(self.basket.keys())
+        for id in ids:
+            del self.basket[id]
+            self.save()
 
     def save(self):
         self.session.modified = True
