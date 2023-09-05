@@ -6,7 +6,7 @@
 .carousel-classic {
     position: relative;
     width: 100%;
-    height: 22rem;
+    height: 30rem; /* Banner heigth */
     z-index: -1;
 }
 

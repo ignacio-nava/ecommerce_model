@@ -38,12 +38,12 @@ urlpatterns = [
             ]
         }
     ), name='password_reset_complete'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('activate/<slug:uidb64>/<slug:token>/',
          views.account_activate, name='activate'),
-    path('profile/edit/', views.account_update, name='update-form'),
-    path('profile/delete_user/', views.delete_user, name='delete_user'),
-    path('profile/delete_confirm/', TemplateView.as_view(
-        template_name="account/user/delete_confirm.html"
-    ), name='delete_confirmation'),
+    # path('profile/edit/', views.account_update, name='update-form'),
+    # path('profile/delete_user/', views.delete_user, name='delete_user'),
+    # path('profile/delete_confirm/', TemplateView.as_view(
+    #     template_name="account/user/delete_confirm.html"
+    # ), name='delete_confirmation'),
 ]

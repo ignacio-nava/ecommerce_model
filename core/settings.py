@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'store',
     'basket',
     'django_extensions',
-    'fontawesomefree',
+    # 'fontawesomefree',
     # 'sslserver',
 
 ]

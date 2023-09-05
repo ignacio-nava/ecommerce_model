@@ -53,7 +53,7 @@
             </a>
           {% else %}
             <a href="{% url 'account:dashboard' %}" class="fc-white">
-              {{ user.email }}
+              My Account
             </a>
             <div>
               <button id="user-options-toggle" class="user-options-toggle fs-300">
@@ -61,12 +61,6 @@
               </button>
               <div id="user-options" class="user-options">
                 <ul class="pad-y-050" role="list">
-                  <li class="pad-y-050">
-                    <a href="{% url 'account:update-form' %}" class="fc-dark pad-y-030 pad-x-100">
-                      <i class="fa-solid fa-pen"></i>
-                      <span>Edit</span>
-                    </a>
-                  </li>
                   <li class="pad-y-050">
                     <a href="{% url 'account:logout' %}" class="fc-dark pad-y-030 pad-x-100">
                       <i class="fa-solid fa-right-from-bracket"></i>
@@ -121,7 +115,7 @@
                 <li><a href="{% url 'account:login-form'%}" class="fc-white">Sing In</a></li>
                 <li><a href="{% url 'account:registration-form'%}" class="fc-white">Register</a></li>
               {% else %}
-                <li><a href="{% url 'account:update-form' %}" class="fc-white">Edit</a></li>
+                <li><a href="{% url 'account:dashboard' %}" class="fc-white">Dashboard</a></li>
                 <li><a href="{% url 'account:logout' %}" class="fc-white">Logout</a></li>
               {% endif %}
             </ul>

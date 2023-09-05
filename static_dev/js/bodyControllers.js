@@ -1,8 +1,13 @@
-function fixHeight() {
-    const header = document.querySelector('header')
+function fixHeight(setHeight) {
     const main = document.querySelector('main')
-    const footer = document.querySelector('footer')
 
+    if (!setHeight) {
+        main.style.height = null
+        return
+    }
+
+    const header = document.querySelector('header')
+    const footer = document.querySelector('footer')
     const newHeight = window.innerHeight - (header.scrollHeight + footer.scrollHeight)
     main.style.height = `${newHeight}px`
     return
@@ -10,11 +15,9 @@ function fixHeight() {
 
 function normalizeHeight() {
     const body = document.querySelector('body')
-
-    if (window.innerHeight < body.scrollHeight) return
-
-    fixHeight()
-    return
+    return fixHeight(window.innerHeight >= body.scrollHeight)
 }
 
 document.addEventListener('DOMContentLoaded', normalizeHeight)
+
+window.addEventListener('resize', normalizeHeight)

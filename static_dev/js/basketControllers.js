@@ -43,11 +43,12 @@ function updateSummary({subtotal, total}) {
             .replaceAll('$', '')
     )
 
-    const shippingPrice = Number(
+    const shippingPrice = shippingMethod ? Number(
         [...shippingMethod.children]
             .filter(child => child.selected)[0]
             .dataset.price
-    )
+    ) :
+    0
     updateSummary({
         total: String(Math.round((subtotalPrice + shippingPrice)*100)/100)
     })
@@ -171,7 +172,7 @@ async function deleteListener(e) {
         columnProducts.appendChild(newRow)
     }
 
-    normalizeHeight()
+    fixHeight(true)
 
     // Update Items Count
     updateItemsInBasket(data.qty)

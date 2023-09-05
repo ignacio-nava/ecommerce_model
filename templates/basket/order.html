@@ -6,10 +6,10 @@
 
 {% block content %}
 {% with px_img_value="100" %}
-  <section class="basket-container" id="items-in-basket" style="--px-img-value: {{ px_img_value }}">
+  <section class="basket-container pad-bot-400" id="items-in-basket" style="--px-img-value: {{ px_img_value }}">
     {% if order.status == "DISPATCHED" %}
       <h1 style="padding: 0 1rem; font-size: 1.5rem; font-weight: bold; color: green;">
-        SUCCES
+        {{ order.status }}
       </h1>
     {% endif %}
       <div class="basket-table gap-100">
@@ -62,6 +62,9 @@
               <li><p>City: <span class="bold">{{ order.city }}</span></p></li>
               <li><p>Address: <span class="bold">{{ order.address }}</span></p></li>
               <li><p>DNI: <span class="bold">{{ order.dni }}</span></p></li>
+              {% if order.payment_method %}
+              <li><p>Payment Method: <span class="bold">{{ order.payment_method }}</span></p></li>
+              {% endif %}
             </ul>
           </div>
         </div>

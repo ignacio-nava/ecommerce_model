@@ -11,7 +11,7 @@
 
 {% block content %}
   {% with px_img_value="100" %}
-  <section class="basket-container" id="items-in-basket" style="--px-img-value: {{ px_img_value }}">
+  <section class="basket-container pad-bot-400" id="items-in-basket" style="--px-img-value: {{ px_img_value }}">
     <form action="" method="post">
       {% csrf_token %}
       <div class="basket-table gap-100">

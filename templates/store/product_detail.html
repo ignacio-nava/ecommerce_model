@@ -3,7 +3,44 @@
 {% load static %}
 
 {% block content %}
-  <h1>Product Detail</h1>
+<section class=" pad-top-200 pad-bot-400 w-100 h-100">
+  <div style="box-shadow: 0 5px 4px #8080801c;">
+    <div class="container">
+      <div class="product-item__navigation flex-row gap-050">
+        <a href="{% url 'store:product_all' %}">Home</a>
+        <span>></span>
+        <a href="{% url 'store:category_list' slug=product.category.slug %}">{{ product.category }}</a>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="product-item">
+      <div class="product-item__img">
+        {% if product.image_external %}
+          <img src="{{product.image_external}}" class="product_image" alt="product-image"/>
+        {% else %}
+          <img src="{% get_media_prefix %}{{product.image}}" class="product_image" alt="product-image"/>
+        {% endif %}
+      </div>
+      <div class="product-item__content flex-column gap-200 pad-top-200">
+        <div class="flex-column">
+          <div data-role="title">{{ product.title|title }}</div>
+          <div data-role="price">${{ product.price }}</div>
+        </div>
+        <div class="fs-200 bold" data-role="basket">
+          <button id="add-to-basket-button" value="{{ product.id }}">Add To Basket</button>
+          <select name="" id="qty-select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- <h1>Product Detail</h1>
   {% if product.image_external %}
     <img src="{{product.image_external}}" class="product_image" width="100" height="100"/>
   {% else %}
@@ -23,32 +60,35 @@
     <option value="3">3</option>
     <option value="4">4</option>
   </select>
-  {% endif %}
+  {% endif %} -->
 
-  <script>
-    $('document').ready(() => {
-      $('#add-to-basket-button').on('click', e => {
-        e.preventDefault()
-        $.ajax({
-          type: 'POST',
-          url: '{% url "basket:basket_add" %}',
-          data: {
-            productId: $('#add-to-basket-button').val(),
-            productQty: $('#qty-select option:selected').text(),
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            action: 'post'
-          },
-          success: json => {
-            const inCartItems = $('.in-cart-shopping')
-            $('#cart-count-items').html(json.basket.qty)
-            json.basket.qty > 0 ? inCartItems.show() : inCartItems.hide()
-            showMessage('Added Product')
-          },
-          error: (xhr, errormsg, err) => {
-            console.log(errormsg)
-          }
-        })
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $('document').ready(() => {
+    $('#add-to-basket-button').on('click', e => {
+      e.preventDefault()
+      $.ajax({
+        type: 'POST',
+        url: '{% url "basket:basket_add" %}',
+        data: {
+          productId: $('#add-to-basket-button').val(),
+          productQty: $('#qty-select option:selected').text(),
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action: 'post'
+        },
+        success: json => {
+          const inCartItems = $('.in-cart-shopping')
+          $('#cart-count-items').html(json.basket.qty)
+          json.basket.qty > 0 ? inCartItems.show() : inCartItems.hide()
+          showMessage('Added Product')
+        },
+        error: (xhr, errormsg, err) => {
+          console.log(errormsg)
+        }
       })
     })
-  </script>
+  })
+</script>
 {% endblock %}

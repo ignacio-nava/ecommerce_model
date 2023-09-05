@@ -6,10 +6,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.views import LoginView, PasswordResetView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.views.generic import ListView
 from django.contrib import messages
 
 from .models import UserBase
@@ -20,6 +22,8 @@ from .forms import (
     PwResetForm
 )
 from .tokens import account_activation_token
+
+from basket.models import Order, Item
 
 BACK_TO_SITE = {
     "innerHTML": "Back to site",
@@ -83,10 +87,22 @@ class OwnLoginView(LoginView):
         return context
 
 
-#  Replace with ListView
-@login_required
-def dashboard(request):
-    return render(request, 'account/user/dashboard.html', {})
+class DashboardView(LoginRequiredMixin, ListView):
+    template_name = 'account/user/dashboard.html'
+
+    def get(self, request):
+        items = Item.objects.filter(
+            order__user=self.request.user).order_by('order')
+        orders = []
+        for item in items:
+            if len(orders) == 0:
+                orders.append([item])
+            elif item.order.id == orders[-1][0].order.id:
+                orders[-1].append(item)
+            else:
+                orders.append([item])
+
+        return render(request, self.template_name, {'orders': orders[::-1]})
 
 
 @login_required
