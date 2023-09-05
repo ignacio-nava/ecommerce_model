@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block head %}
+<title>eCom | {{ page_obj.object_list.0.category }} </title>
 <script src="{% static 'js/paginatorControllers.js' %}" defer></script>
 {% endblock %}
 

@@ -4,6 +4,10 @@
 
 {% load basket_tags %}
 
+{% block head %}
+<title>eCom | Order </title>
+{% endblock %}
+
 {% block content %}
 {% with px_img_value="100" %}
   <section class="basket-container pad-bot-400" id="items-in-basket" style="--px-img-value: {{ px_img_value }}">
