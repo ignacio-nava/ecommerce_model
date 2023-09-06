@@ -1,4 +1,5 @@
 function fixHeight(setHeight) {
+    return
     const main = document.querySelector('main')
 
     if (!setHeight) {
