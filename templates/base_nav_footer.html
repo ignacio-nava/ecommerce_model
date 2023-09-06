@@ -14,7 +14,7 @@
 
 {% block nav %}
   <header class="header">
-    <div class="primary-navigation header-container">
+    <nav class="primary-navigation header-container">
       <a href="{% url 'store:product_all' %}" class="logo">eCom</a>
       {% if search %}
         <div class="navigation-form">
@@ -85,7 +85,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   </header>
 {% endblock %}
 
