@@ -26,5 +26,6 @@ Run
   python manage.py migrate
   python manage.py createsuperuser
   python manage.py runscript load_products
+  python manage.py runscript load_shipping_methods
   python manage.py runserver  
 ```
