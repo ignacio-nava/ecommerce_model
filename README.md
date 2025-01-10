@@ -1,6 +1,8 @@
 # Ecommerce Model
 
-It's a study project. I'm trying to employ as many technologies as possible. I choose an e-commerce template site. In the front, I'm working with JQuery and JavaScript vanilla (making my carousel module). In the backend, I'm using Django.
+It's a study project. I'm trying to employ as many technologies as possible. I choose an e-commerce template site. In the front, I'm working with JQuery and JavaScript vanilla (making my [carousel module](https://github.com/ignacio-nava/carousel_simple)). In the backend, I'm using Django.
+
+The data for the system is loaded from files obtained via scraping, with the scraping code available in this [repository](https://github.com/ignacio-nava/simple_playwright_test)
 
 ## Deployment
 
